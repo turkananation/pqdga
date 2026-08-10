@@ -1,4 +1,4 @@
-## 0.1.0 (2026-06-10)
+## 0.1.0
 
 - Initial version.
 - Added defensive-research documentation under `doc/` (overview, architecture, classical catalog, PQ design, package utilization, SOC playbooks, adversarial hardness, implementation roadmap, ethics) and living progress tracker `doc/PROGRESS.md`.

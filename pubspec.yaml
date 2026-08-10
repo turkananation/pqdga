@@ -1,7 +1,8 @@
 name: pqdga
-description: Defensive-research DGA lab — classical generators and post-quantum rendezvous design for SOC training (not operational C2).
+description: A defensive research framework for studying deterministic namespace/rendezvous constructions under different cryptographic binding models, including ML-KEM, ML-DSA, SLH-DSA, KMAC, hybrid key material, ratcheting, hierarchical derivation, multi-party and threshold models.
 version: 0.1.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/turkananation/pqdga
+homepage: https://turkananation.github.io/pqdga/
 
 environment:
   sdk: ^3.12.0
