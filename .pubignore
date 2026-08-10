@@ -1,0 +1,11 @@
+# CI/CD and repository workflows
+
+.github/
+.gitlab-ci.yml
+.travis.yml
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+PULL_REQUEST_TEMPLATE.md
+
+tool/
+benchmark/
