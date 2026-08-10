@@ -1,4 +1,4 @@
-# pqdga
+# PQDGA - Post Quantum Domain Generation Algorithms
 
 Defensive-research Dart library for **classical DGA reproduction** and **post-quantum rendezvous design**.
 
