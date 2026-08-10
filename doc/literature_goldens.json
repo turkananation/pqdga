@@ -1,0 +1,98 @@
+{
+  "source": "baderj/domain_generation_algorithms",
+  "pin_date": "2015-05-14",
+  "note": "Lab goldens for literature-perfect P1/P2 re-keys. No malware samples.",
+  "families": {
+    "ramnit": {
+      "seed": "16647bb4",
+      "domains": [
+        "prklqkkwhgpshiejk.click",
+        "rvcophrldij.com",
+        "jwerjdldqihxucyfoh.eu",
+        "kihjtklbkgdn.bid",
+        "obmyqaflbudqfssibeb.click"
+      ]
+    },
+    "nymaim": {
+      "domains": [
+        "rjvoupbixei.com",
+        "ogqywunvso.net",
+        "vfnevybb.com",
+        "mwejxrzgip.com",
+        "tkufyyjg.org"
+      ]
+    },
+    "shiotob": {
+      "seed_domain": "4ypv1eehphg3a.com",
+      "domains": [
+        "4ypv1eehphg3a.com",
+        "dduub92cik.net",
+        "fzwrzifvtl.com",
+        "wnjjsiya5x.net",
+        "zyvdupb4uk.com"
+      ]
+    },
+    "vawtrak": {
+      "seed": "deadbeef",
+      "domains": [
+        "detglevgza.top",
+        "arcxcps.top",
+        "avgjqduxq.top",
+        "kjolgrovcf.top",
+        "tefsbuv.top"
+      ]
+    },
+    "dircrypt": {
+      "seed": "8eb35b15",
+      "domains": [
+        "omihgxsjrjp.com",
+        "tdqqrkabur.com",
+        "ergxmwbqepucr.com",
+        "czmhrhllgzvxzxmwb.com",
+        "ibzcbcnbcjqofidoa.com"
+      ]
+    },
+    "corebot": {
+      "seed": 0,
+      "nr_b": 8,
+      "domains": [
+        "vgfofehgj5vchstmla6s.ddns.net",
+        "3pqfkxqvy252yxi4uxkjc8a.ddns.net",
+        "5junclmlqr5t561.ddns.net",
+        "cbwxk0m0mjk25r5luxu.ddns.net",
+        "mv3254mxa0uxu4cvkjgdg83.ddns.net"
+      ]
+    },
+    "proslikefan": {
+      "magic": "prospect",
+      "domains": [
+        "gxguijagrkt.com",
+        "megiujkh.net",
+        "sxfngve.biz",
+        "bnlctch.ru",
+        "nlppkpjcss.cc"
+      ]
+    },
+    "kraken": {
+      "seed_set": "a",
+      "tld_set": 1,
+      "domains": [
+        "klrbvjtb.com",
+        "uaazieqmts.com",
+        "zoipmnwr.net",
+        "jbtobfdwjfzp.net",
+        "smmyuhxlt.tv"
+      ]
+    },
+    "pykspa": {
+      "variant": "precursor",
+      "domains": [
+        "ycaywwiugkeq.info",
+        "fqouxifox.cc",
+        "rktqeifox.com",
+        "cyygawiq.info",
+        "uismsmiq.biz"
+      ]
+    }
+  }
+}

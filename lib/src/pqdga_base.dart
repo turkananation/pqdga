@@ -1,0 +1,91 @@
+export 'common/predictability.dart';
+export 'common/soc_features.dart';
+export 'common/classical_soc_metadata.dart';
+export 'common/hardness_scorecard.dart';
+export 'common/multi_channel_codec.dart';
+export 'common/flux_schedule.dart';
+export 'common/binding_analysis.dart';
+export 'common/detector_notebook.dart';
+export 'common/lab_harness.dart';
+export 'common/notebook_consumer.dart';
+export 'classical/corpus/literature_notes.dart';
+export 'classical/corpus/literature_prng.dart';
+
+export 'classical/dga_core.dart';
+export 'classical/dga_config.dart';
+export 'classical/dga_result.dart';
+export 'classical/dga_generator.dart';
+export 'classical/algorithms/bamital_dga.dart';
+export 'classical/algorithms/banjori_dga.dart';
+export 'classical/algorithms/conficker_dga.dart';
+export 'classical/algorithms/cryptolocker_dga.dart';
+export 'classical/algorithms/locky_dga.dart';
+export 'classical/algorithms/matsnu_dga.dart';
+export 'classical/algorithms/murofet_dga.dart';
+export 'classical/algorithms/necurs_dga.dart';
+export 'classical/algorithms/pushdo_dga.dart';
+export 'classical/algorithms/qakbot_dga.dart';
+export 'classical/algorithms/ranbyus_dga.dart';
+export 'classical/algorithms/rovnix_dga.dart';
+export 'classical/algorithms/simda_dga.dart';
+export 'classical/algorithms/suppobox_dga.dart';
+export 'classical/algorithms/tinba_dga.dart';
+export 'classical/algorithms/time_based_dga.dart';
+export 'classical/algorithms/arithmetic_dga.dart';
+export 'classical/algorithms/dictionary_based_dga.dart';
+export 'classical/algorithms/permutation_dga.dart';
+// R8 research generics
+export 'classical/algorithms/markov_dga.dart';
+export 'classical/algorithms/idn_dga.dart';
+export 'classical/algorithms/oracle_seed_dga.dart';
+export 'classical/algorithms/nested_label_dga.dart';
+export 'classical/algorithms/multi_channel_dga.dart';
+export 'classical/algorithms/fast_flux_dga.dart';
+// Classical P1
+export 'classical/algorithms/ramnit_dga.dart';
+export 'classical/algorithms/nymaim_dga.dart';
+export 'classical/algorithms/shiotob_dga.dart';
+export 'classical/algorithms/pykspa_dga.dart';
+export 'classical/algorithms/vawtrak_dga.dart';
+export 'classical/algorithms/emotet_dga.dart';
+// Classical P2
+export 'classical/algorithms/kraken_dga.dart';
+export 'classical/algorithms/torpig_dga.dart';
+export 'classical/algorithms/corebot_dga.dart';
+export 'classical/algorithms/dircrypt_dga.dart';
+export 'classical/algorithms/proslikefan_dga.dart';
+
+export 'post_quantum/pqdga_core.dart';
+export 'post_quantum/pqdga_config.dart';
+export 'post_quantum/pqdga_result.dart';
+export 'post_quantum/pqdga_generator.dart';
+export 'post_quantum/crypto/dns_label_codec.dart';
+export 'post_quantum/crypto/epoch_bucket.dart';
+export 'post_quantum/crypto/shake_xof.dart';
+export 'post_quantum/crypto/kmac256.dart';
+export 'post_quantum/crypto/lexical_label_codec.dart';
+export 'post_quantum/crypto/slh_dsa_sizes.dart';
+export 'post_quantum/crypto/slh_dsa_provider.dart';
+export 'post_quantum/lab/post_rendezvous_session.dart';
+export 'post_quantum/algorithms/decentralized_pqdga.dart';
+export 'post_quantum/algorithms/hybrid_shared_secret_pqdga.dart';
+export 'post_quantum/algorithms/identity_based_pqdga.dart';
+export 'post_quantum/algorithms/quantum_resistant_pqdga.dart';
+export 'post_quantum/algorithms/shared_secret_pqdga.dart';
+export 'post_quantum/algorithms/signature_authenticated_pqdga.dart';
+// PQ extras
+export 'post_quantum/algorithms/envelope_rendezvous_pqdga.dart';
+export 'post_quantum/algorithms/rate_limited_pqdga.dart';
+export 'post_quantum/algorithms/multi_recipient_pqdga.dart';
+// R9 binding research ladder
+export 'post_quantum/algorithms/kmac_shared_secret_pqdga.dart';
+export 'post_quantum/algorithms/hybrid_kmac_pqdga.dart';
+export 'post_quantum/algorithms/ratcheting_pqdga.dart';
+export 'post_quantum/algorithms/hierarchical_pqdga.dart';
+export 'post_quantum/algorithms/multi_party_pqdga.dart';
+export 'post_quantum/algorithms/threshold_pqdga.dart';
+export 'post_quantum/algorithms/authenticated_context_pqdga.dart';
+// Post-R9 deferred extras (hook pqforge/pqcrypto primitives — no reimplementation)
+export 'post_quantum/algorithms/lexical_shared_secret_pqdga.dart';
+export 'post_quantum/algorithms/slh_dsa_checkpoint_pqdga.dart';
+export 'post_quantum/algorithms/hybrid_authenticated_pqdga.dart';

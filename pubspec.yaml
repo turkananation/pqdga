@@ -1,0 +1,25 @@
+name: pqdga
+description: Defensive-research DGA lab — classical generators and post-quantum rendezvous design for SOC training (not operational C2).
+version: 0.1.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.12.0
+
+# Add regular dependencies here.
+dependencies:
+  pointycastle: ^4.0.0
+  pqforge: ^0.3.0
+  # Direct for SHAKE XOF + FIPS 205 SLH-DSA (pqforge 0.3.x does not re-export SLH-DSA).
+  # Override below lifts past pqforge's ^0.3.1 constraint while ML-KEM/ML-DSA APIs stay compatible.
+  pqcrypto: ^0.4.0
+  # Research plumbing: epoch buckets, Result/validators, codecs — not crypto.
+  swissarmyknife: ^0.1.0
+
+dependency_overrides:
+  # pqforge 0.3.0 pins pqcrypto ^0.3.1; 0.4.0 adds SLH-DSA without breaking KEM/DSA call sites used here.
+  pqcrypto: ^0.4.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.6
