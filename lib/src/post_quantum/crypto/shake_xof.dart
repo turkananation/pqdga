@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:pqforge/pqforge.dart';
+
 // SHAKE is implemented in pqcrypto but not re-exported from the public barrel
 // in 0.3.1 — direct import is the documented R3 path (see doc/04).
 // ignore: implementation_imports
-import 'package:pqcrypto/src/common/shake.dart' as pqc;
 
 /// Thin domain-expander helper over pqcrypto SHAKE XOFs.
 class ShakeXof {
@@ -14,7 +15,7 @@ class ShakeXof {
     if (outputLength < 0) {
       throw ArgumentError.value(outputLength, 'outputLength', 'must be >= 0');
     }
-    return pqc.Shake256.shake(input, outputLength);
+    return Shake256.shake(input, outputLength);
   }
 
   /// One-shot SHAKE128 expand (alternate profile).
@@ -22,6 +23,6 @@ class ShakeXof {
     if (outputLength < 0) {
       throw ArgumentError.value(outputLength, 'outputLength', 'must be >= 0');
     }
-    return pqc.Shake128.shake(input, outputLength);
+    return Shake128.shake(input, outputLength);
   }
 }

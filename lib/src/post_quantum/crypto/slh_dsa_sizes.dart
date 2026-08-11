@@ -9,7 +9,8 @@
 /// signatures** when keys are supplied (lab ephemeral only).
 library;
 
-import 'package:pqcrypto/pqcrypto.dart';
+import 'package:pqforge/pqforge.dart';
+
 
 /// One SLH-DSA parameter set for lab IOC / algorithm config.
 ///

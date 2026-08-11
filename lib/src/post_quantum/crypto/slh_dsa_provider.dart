@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:pqcrypto/pqcrypto.dart';
+import 'package:pqforge/pqforge.dart';
 
 /// Primitive preference: **pqforge → pqcrypto → other**.
 ///
