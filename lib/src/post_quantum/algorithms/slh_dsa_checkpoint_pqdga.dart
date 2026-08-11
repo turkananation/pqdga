@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:pqcrypto/pqcrypto.dart';
 import 'package:pqdga/src/post_quantum/crypto/dns_label_codec.dart';
 import 'package:pqdga/src/post_quantum/crypto/shake_xof.dart';
 import 'package:pqdga/src/post_quantum/crypto/slh_dsa_sizes.dart';
 import 'package:pqdga/src/post_quantum/pqdga_core.dart';
+import 'package:pqforge/pqforge.dart';
 
 /// SLH-DSA **checkpoint** lab family (post-R9 optional).
 ///
