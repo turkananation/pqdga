@@ -1,4 +1,5 @@
 export 'common/predictability.dart';
+export 'common/lab_key_sink.dart';
 export 'common/soc_features.dart';
 export 'common/classical_soc_metadata.dart';
 export 'common/hardness_scorecard.dart';

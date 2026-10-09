@@ -31,17 +31,17 @@ class LiteratureNote {
   });
 
   Map<String, dynamic> toJson() => {
-        'family_id': familyId,
-        'display_name': displayName,
-        'tier': tier,
-        'fidelity': fidelity,
-        'source': source,
-        'prng': prng,
-        'seed_model': seedModel,
-        'notes': notes,
-        'known_seeds': knownSeeds,
-        'checklist': checklist,
-      };
+    'family_id': familyId,
+    'display_name': displayName,
+    'tier': tier,
+    'fidelity': fidelity,
+    'source': source,
+    'prng': prng,
+    'seed_model': seedModel,
+    'notes': notes,
+    'known_seeds': knownSeeds,
+    'checklist': checklist,
+  };
 }
 
 /// Catalog of classical family literature pins (P1/P2 re-key table).
@@ -96,11 +96,7 @@ class LiteratureCorpus {
           'Pure domain walk from seed FQDN; alternates .com/.net. Seed domain '
           'is the extract IOC. Goldens pin 4ypv1eehphg3a.com stream.',
       knownSeeds: ['4ypv1eehphg3a.com'],
-      checklist: [
-        'date independence',
-        'odd-index .net swap',
-        'charset 0-9a-z',
-      ],
+      checklist: ['date independence', 'odd-index .net swap', 'charset 0-9a-z'],
     ),
     LiteratureNote(
       familyId: 'pykspa',
@@ -113,11 +109,7 @@ class LiteratureCorpus {
       notes:
           'Improved Pykspa needs MD6 fixtures (not bundled). Precursor is the '
           'pinned literature path. Seed = unix//(2*86400).',
-      checklist: [
-        '2-day unix bucket',
-        'mixed TLD table',
-        'length 6–12',
-      ],
+      checklist: ['2-day unix bucket', 'mixed TLD table', 'length 6–12'],
     ),
     LiteratureNote(
       familyId: 'vawtrak',
@@ -131,11 +123,7 @@ class LiteratureCorpus {
           'Config seed (not pure date). Goldens pin seed 0xDEADBEEF. '
           'campaignId/tier are notebook metadata only.',
       knownSeeds: ['deadbeef'],
-      checklist: [
-        '31-bit mask after step',
-        '.top TLD',
-        'length 5–10',
-      ],
+      checklist: ['31-bit mask after step', '.top TLD', 'length 5–10'],
     ),
     LiteratureNote(
       familyId: 'emotet',
@@ -216,11 +204,7 @@ class LiteratureCorpus {
       notes:
           'Goldens pin seed 0x8EB35B15. Length 8–20; a–z labels; fixed .com.',
       knownSeeds: ['8eb35b15'],
-      checklist: [
-        'Park–Miller shared with Ramnit',
-        'length 8–20',
-        '.com only',
-      ],
+      checklist: ['Park–Miller shared with Ramnit', 'length 8–20', '.com only'],
     ),
     LiteratureNote(
       familyId: 'proslikefan',
@@ -243,10 +227,16 @@ class LiteratureCorpus {
   ];
 
   static LiteratureNote? find(String familyOrAlgorithm) {
-    final key = familyOrAlgorithm.toLowerCase().replaceAll(RegExp(r'[^a-z]'), '');
+    final key = familyOrAlgorithm.toLowerCase().replaceAll(
+      RegExp(r'[^a-z]'),
+      '',
+    );
     for (final n in notes) {
       final id = n.familyId.replaceAll(RegExp(r'[^a-z]'), '');
-      final name = n.displayName.toLowerCase().replaceAll(RegExp(r'[^a-z]'), '');
+      final name = n.displayName.toLowerCase().replaceAll(
+        RegExp(r'[^a-z]'),
+        '',
+      );
       if (key == id || key == name || key.contains(id) || id.contains(key)) {
         return n;
       }
@@ -260,13 +250,14 @@ class LiteratureCorpus {
   }
 
   static Map<String, dynamic> summaryTable() => {
-        'kind': 'literature_corpus',
-        'source_primary':
-            'https://github.com/baderj/domain_generation_algorithms',
-        'families': [for (final n in notes) n.toJson()],
-        'literature_perfect_count':
-            notes.where((n) => n.fidelity == 'literature-perfect').length,
-        'research_model_count':
-            notes.where((n) => n.fidelity == 'research-model').length,
-      };
+    'kind': 'literature_corpus',
+    'source_primary': 'https://github.com/baderj/domain_generation_algorithms',
+    'families': [for (final n in notes) n.toJson()],
+    'literature_perfect_count': notes
+        .where((n) => n.fidelity == 'literature-perfect')
+        .length,
+    'research_model_count': notes
+        .where((n) => n.fidelity == 'research-model')
+        .length,
+  };
 }

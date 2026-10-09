@@ -129,15 +129,15 @@ class KmacSharedSecretLabSession {
 
   /// Algorithm view that recovers ss via decaps only.
   KmacSharedSecretPqdga get asDecapsConfig => KmacSharedSecretPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        kmacCustomization: algorithm.kmacCustomization,
-        domainSeparator: algorithm.domainSeparator,
-        kdf: algorithm.kdf,
-        kemAlgorithm: kemAlgorithm,
-        kemCiphertext: kemCiphertext,
-        kemSecretKey: kemSecretKey,
-        kemPublicKey: kemPublicKey,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    kmacCustomization: algorithm.kmacCustomization,
+    domainSeparator: algorithm.domainSeparator,
+    kdf: algorithm.kdf,
+    kemAlgorithm: kemAlgorithm,
+    kemCiphertext: kemCiphertext,
+    kemSecretKey: kemSecretKey,
+    kemPublicKey: kemPublicKey,
+  );
 }

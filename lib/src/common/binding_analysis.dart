@@ -29,7 +29,8 @@ class BindingAnalysis {
     Uint8List? sharedSecret,
     int count = 5,
   }) async {
-    final ss = sharedSecret ??
+    final ss =
+        sharedSecret ??
         Uint8List.fromList(List<int>.generate(32, (i) => i + 1));
     final ct = Uint8List(1088);
     final kmac = await PQDGAGenerator(
@@ -69,7 +70,7 @@ class BindingAnalysis {
       'shake_xof': shake.xof,
       'finding': differ
           ? 'KMAC domain-separated expand yields a distinct namespace from '
-              'raw SHAKE absorb of the same ss‖context — construction delta is real.'
+                'raw SHAKE absorb of the same ss‖context — construction delta is real.'
           : 'Unexpected collision — investigate expand inputs.',
       'security_claim': 'none — construction comparison only',
     };
@@ -82,8 +83,8 @@ class BindingAnalysis {
     int lateEpoch = 3,
     int count = 3,
   }) async {
-    final r = root ??
-        Uint8List.fromList(List<int>.generate(32, (i) => 0x40 + i));
+    final r =
+        root ?? Uint8List.fromList(List<int>.generate(32, (i) => 0x40 + i));
     final earlyKey = RatchetingPqdga.deriveEpochKey(
       root: r,
       epochIndex: earlyEpoch,
@@ -102,7 +103,10 @@ class BindingAnalysis {
       count,
     );
 
-    final reconstructFails = !_listEq(spoofEarlyWithLateKey.domains, early.domains);
+    final reconstructFails = !_listEq(
+      spoofEarlyWithLateKey.domains,
+      early.domains,
+    );
     return {
       'experiment': 'R9c_ratchet_delete_forward',
       'early_epoch': earlyEpoch,
@@ -113,7 +117,7 @@ class BindingAnalysis {
       'later_key_reconstructs_earlier_names': !reconstructFails,
       'finding': reconstructFails
           ? 'With epoch index bound into expand, a later epoch key alone does '
-              'not reproduce earlier names in this lab construction.'
+                'not reproduce earlier names in this lab construction.'
           : 'Later key reproduced earlier names — weak binding; do not claim FS.',
       'security_claim':
           'NO forward-secrecy claim — lab observation under delete-forward drill only',
@@ -126,8 +130,8 @@ class BindingAnalysis {
     Uint8List? root,
     int count = 3,
   }) async {
-    final r = root ??
-        Uint8List.fromList(List<int>.generate(32, (i) => 0x10 + i));
+    final r =
+        root ?? Uint8List.fromList(List<int>.generate(32, (i) => 0x10 + i));
     final a = HierarchicalPqdga.labEstablish(
       rootSecret: r,
       hierarchyPath: const ['region-a', 'team-1'],
@@ -155,10 +159,10 @@ class BindingAnalysis {
       'domains_c': dc.domains,
       'siblings_differ': !_listEq(da.domains, db.domains),
       'regions_differ': !_listEq(da.domains, dc.domains),
-      'finding': (!_listEq(da.domains, db.domains) &&
-              !_listEq(da.domains, dc.domains))
+      'finding':
+          (!_listEq(da.domains, db.domains) && !_listEq(da.domains, dc.domains))
           ? 'Sibling and cross-region leaves produce distinct namespaces from '
-              'the same root — compartmentation holds in-lab.'
+                'the same root — compartmentation holds in-lab.'
           : 'Unexpected namespace collision across hierarchy paths.',
       'security_claim': 'none — lab compartment drill',
     };
@@ -193,8 +197,10 @@ class BindingAnalysis {
     ).generateDomains(_labDate, count);
 
     // Drop one multi-party secret → must fail closed.
-    final incompleteSecrets =
-        mp.algorithm.partySecrets.sublist(0, partyCount - 1);
+    final incompleteSecrets = mp.algorithm.partySecrets.sublist(
+      0,
+      partyCount - 1,
+    );
     var incompleteThrows = false;
     try {
       await PQDGAGenerator(
@@ -240,30 +246,29 @@ class BindingAnalysis {
     };
   }
 
-
   /// Research writeup blurbs for notebooks (claim-disciplined).
   static Map<String, String> writeups() => {
-        'R9a_kmac_vs_R4_shake':
-            'Same shared secret and campaign/epoch context expand under KMAC256 '
-            'vs raw SHAKE256 into **distinct** domain namespaces. This is a '
-            'construction delta (domain separation), not a security proof. '
-            'Detectors must not assume SHAKE precomputes cover KMAC campaigns.',
-        'R9c_ratchet_delete_forward':
-            'Later epoch keys with epoch index bound into expand do **not** '
-            'reproduce earlier names in this lab construction. Observation only: '
-            '**no forward-secrecy claim** without a full threat model (open).',
-        'R9d_hierarchy_compartment':
-            'Sibling hierarchy paths from the same root produce distinct '
-            'namespaces in-lab (compartmentation drill). Not a formal isolation '
-            'proof — validates path-bound expand behavior for SOC playbooks.',
-        'R9e_f_ops_cost':
-            'Multi-party needs all n secrets online; threshold lab needs any k of n. '
-            'Resilience vs sync tradeoff. **Not production TSS.** Keep '
-            'MultiRecipient wrap ≠ MultiParty joint ≠ Threshold k-of-n distinct.',
-        'global_claim_discipline':
-            'No novelty / first-PQ-DGA claims. Construction-class framing only. '
-            'No FS claim (R9c). No production TSS (R9f).',
-      };
+    'R9a_kmac_vs_R4_shake':
+        'Same shared secret and campaign/epoch context expand under KMAC256 '
+        'vs raw SHAKE256 into **distinct** domain namespaces. This is a '
+        'construction delta (domain separation), not a security proof. '
+        'Detectors must not assume SHAKE precomputes cover KMAC campaigns.',
+    'R9c_ratchet_delete_forward':
+        'Later epoch keys with epoch index bound into expand do **not** '
+        'reproduce earlier names in this lab construction. Observation only: '
+        '**no forward-secrecy claim** without a full threat model (open).',
+    'R9d_hierarchy_compartment':
+        'Sibling hierarchy paths from the same root produce distinct '
+        'namespaces in-lab (compartmentation drill). Not a formal isolation '
+        'proof — validates path-bound expand behavior for SOC playbooks.',
+    'R9e_f_ops_cost':
+        'Multi-party needs all n secrets online; threshold lab needs any k of n. '
+        'Resilience vs sync tradeoff. **Not production TSS.** Keep '
+        'MultiRecipient wrap ≠ MultiParty joint ≠ Threshold k-of-n distinct.',
+    'global_claim_discipline':
+        'No novelty / first-PQ-DGA claims. Construction-class framing only. '
+        'No FS claim (R9c). No production TSS (R9f).',
+  };
 
   /// Run the full binding-ladder analysis suite.
   static Future<Map<String, dynamic>> runAll() async {

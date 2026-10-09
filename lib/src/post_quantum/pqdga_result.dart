@@ -69,21 +69,20 @@ class PQDGAResult {
 
   /// Convenience: classical-style summary without PQ-only fields.
   Map<String, dynamic> toSocSummary() => {
-        'algorithm': algorithm,
-        'domains': domains.length,
-        'predictable': predictable,
-        'secret_bound': secretBound,
-        'epoch': epoch,
-        'xof': xof,
-        if (kemAlgorithm != null) 'kem_algorithm': kemAlgorithm,
-        if (kemCiphertextLength != null)
-          'kem_ciphertext_length': kemCiphertextLength,
-        if (sigAlgorithm != null) 'sig_algorithm': sigAlgorithm,
-        if (signatureLength != null) 'signature_length': signatureLength,
-        if (pubkeyFingerprint != null)
-          'pubkey_fingerprint': pubkeyFingerprint,
-        'metadata': metadata,
-      };
+    'algorithm': algorithm,
+    'domains': domains.length,
+    'predictable': predictable,
+    'secret_bound': secretBound,
+    'epoch': epoch,
+    'xof': xof,
+    if (kemAlgorithm != null) 'kem_algorithm': kemAlgorithm,
+    if (kemCiphertextLength != null)
+      'kem_ciphertext_length': kemCiphertextLength,
+    if (sigAlgorithm != null) 'sig_algorithm': sigAlgorithm,
+    if (signatureLength != null) 'signature_length': signatureLength,
+    if (pubkeyFingerprint != null) 'pubkey_fingerprint': pubkeyFingerprint,
+    'metadata': metadata,
+  };
 
   @override
   String toString() {

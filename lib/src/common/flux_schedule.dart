@@ -41,12 +41,12 @@ class FluxSchedule {
 
   /// Serialize into DGA / PQ result metadata (non-secret).
   Map<String, dynamic> toMetadata() => {
-        'flux_policy_id': policyId,
-        'flux_ttl_seconds': ttlSeconds,
-        'flux_rotation_seconds': rotationSeconds,
-        'flux_double': doubleFlux,
-        'flux_max_ips_per_window': maxIpsPerWindow,
-        'flux_max_ns_per_window': maxNsPerWindow,
-        'needs_infra_correlation': true,
-      };
+    'flux_policy_id': policyId,
+    'flux_ttl_seconds': ttlSeconds,
+    'flux_rotation_seconds': rotationSeconds,
+    'flux_double': doubleFlux,
+    'flux_max_ips_per_window': maxIpsPerWindow,
+    'flux_max_ns_per_window': maxNsPerWindow,
+    'needs_infra_correlation': true,
+  };
 }

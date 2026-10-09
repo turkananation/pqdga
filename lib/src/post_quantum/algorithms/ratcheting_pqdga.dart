@@ -138,7 +138,8 @@ class RatchetingPqdga extends PQDGAAlgorithm {
     if (epochIndex < 0) {
       throw ArgumentError.value(epochIndex, 'epochIndex', 'must be >= 0');
     }
-    final root = rootSecret ??
+    final root =
+        rootSecret ??
         Uint8List.fromList(List<int>.generate(32, (i) => 0xC0 + (i & 0x0f)));
     final ek = deriveEpochKey(
       root: root,
@@ -184,16 +185,16 @@ class RatchetingLabSession {
 
   /// Config holding only the current epoch key (simulates root deletion).
   RatchetingPqdga get asEpochOnlyConfig => RatchetingPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        domainSeparator: algorithm.domainSeparator,
-        kdf: algorithm.kdf,
-        kmacCustomization: algorithm.kmacCustomization,
-        epochKey: epochKey,
-        epochIndex: epochIndex,
-        ratchetId: algorithm.ratchetId,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    domainSeparator: algorithm.domainSeparator,
+    kdf: algorithm.kdf,
+    kmacCustomization: algorithm.kmacCustomization,
+    epochKey: epochKey,
+    epochIndex: epochIndex,
+    ratchetId: algorithm.ratchetId,
+  );
 
   /// Advance one step; caller should drop the prior epoch key for FS drills.
   RatchetingLabSession advance() {

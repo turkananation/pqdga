@@ -40,8 +40,11 @@ void main() {
         isTrue,
         reason: 'kemSecretKey must be wiped in the caller\'s buffer',
       );
-      expect(session.sharedSecret.every((b) => b == 0), isTrue,
-          reason: 'sharedSecret must be wiped in the caller\'s buffer');
+      expect(
+        session.sharedSecret.every((b) => b == 0),
+        isTrue,
+        reason: 'sharedSecret must be wiped in the caller\'s buffer',
+      );
     });
 
     test('public artifacts are deliberately NOT wiped', () {
@@ -51,8 +54,11 @@ void main() {
       session.dispose();
 
       expect(session.kemPublicKey, publicKey);
-      expect(session.kemCiphertext, ciphertext,
-          reason: 'public key and ciphertext are public artifacts');
+      expect(
+        session.kemCiphertext,
+        ciphertext,
+        reason: 'public key and ciphertext are public artifacts',
+      );
     });
 
     test('dispose is idempotent', () {

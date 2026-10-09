@@ -31,10 +31,7 @@ class NymaimPrng {
   NymaimPrng(DateTime date) {
     // isoweekday % 7: Mon=1…Sun=7 → 1…0 (matches Python datetime.isoweekday()%7)
     final iso = date.weekday; // Dart: Mon=1…Sun=7 (same as Python isoweekday)
-    final s = date.year +
-        (date.month << 16) +
-        (iso % 7) +
-        (date.day << 16);
+    final s = date.year + (date.month << 16) + (iso % 7) + (date.day << 16);
     r[0] = (s + 0x52455641) & 0xFFFFFFFF; // 'REVA'
     var r1 = s + 0x49484F4C; // 'IHOL'
     r[1] = r1 <= 0xFFFFFFFF ? r1 : 0;

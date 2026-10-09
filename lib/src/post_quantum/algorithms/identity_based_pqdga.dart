@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:pqforge/pqforge.dart';
 import 'package:pqdga/src/post_quantum/algorithms/signature_authenticated_pqdga.dart';
 import 'package:pqdga/src/post_quantum/crypto/dns_label_codec.dart';
+import 'package:pqdga/src/common/lab_key_sink.dart';
 import 'package:pqdga/src/post_quantum/pqdga_core.dart';
 
 /// Identity-based PQ DGA: SHAKE over embedded verification/public key namespace.
@@ -82,11 +83,26 @@ class IdentityBasedPqdga extends PQDGAAlgorithm {
     bool requireSignature = false,
     String signatureDomainSeparator = 'pqdga/v1/sig',
     Uint8List? signContext,
+    LabKeySink? keySink,
   }) {
     final forge = const PqForge();
     final kp = sigSeed == null
         ? forge.generateSignatureKeyPair(algorithm: algorithm)
         : forge.generateSignatureKeyPairFromSeed(sigSeed, algorithm: algorithm);
+    if (keySink != null) {
+      keySink.record((
+        name: 'signature-secret',
+        algorithm: algorithm.name,
+        secret: true,
+        bytes: kp.secretKey,
+      ));
+      keySink.record((
+        name: 'identity-public',
+        algorithm: algorithm.name,
+        secret: false,
+        bytes: kp.publicKey,
+      ));
+    }
     final algo = IdentityBasedPqdga(
       campaignId: campaignId,
       tld: tld,
@@ -101,6 +117,7 @@ class IdentityBasedPqdga extends PQDGAAlgorithm {
       requireSignature: requireSignature,
       signContext: signContext,
     );
+    keySink?.finish(2);
     return IdentityBasedLabSession(
       algorithm: algo,
       identityPublicKey: kp.publicKey,
@@ -159,17 +176,17 @@ class IdentityBasedLabSession {
 
   /// Config that also signs each domain with the lab sk.
   IdentityBasedPqdga get asSignedConfig => IdentityBasedPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        domainSeparator: algorithm.domainSeparator,
-        xof: algorithm.xof,
-        identityPublicKey: identityPublicKey,
-        identityKind: algorithm.identityKind,
-        signatureAlgorithm: signatureAlgorithm,
-        signatureSecretKey: signatureSecretKey,
-        signatureDomainSeparator: algorithm.signatureDomainSeparator,
-        requireSignature: true,
-        signContext: algorithm.signContext,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    domainSeparator: algorithm.domainSeparator,
+    xof: algorithm.xof,
+    identityPublicKey: identityPublicKey,
+    identityKind: algorithm.identityKind,
+    signatureAlgorithm: signatureAlgorithm,
+    signatureSecretKey: signatureSecretKey,
+    signatureDomainSeparator: algorithm.signatureDomainSeparator,
+    requireSignature: true,
+    signContext: algorithm.signContext,
+  );
 }

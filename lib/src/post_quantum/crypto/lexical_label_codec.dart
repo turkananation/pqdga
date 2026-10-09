@@ -111,9 +111,7 @@ class LexicalLabelCodec {
     }
     final check = DnsLabelCodec.validateLabel(label);
     if (check.isFailure) {
-      throw StateError(
-        'lexical label invalid "$label": ${check.errorOrNull}',
-      );
+      throw StateError('lexical label invalid "$label": ${check.errorOrNull}');
     }
     return (check.valueOrNull!, label.length);
   }

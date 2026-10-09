@@ -85,9 +85,11 @@ class SlhDsaCheckpointPqdga extends PQDGAAlgorithm {
     required String campaignId,
     required int counter,
   }) {
-    return Uint8List.fromList(utf8.encode(
-      '$signatureDomainSeparator|$domain|$epoch|$campaignId|$counter',
-    ));
+    return Uint8List.fromList(
+      utf8.encode(
+        '$signatureDomainSeparator|$domain|$epoch|$campaignId|$counter',
+      ),
+    );
   }
 
   /// Short hex fingerprint of a verification key (config-extraction IOC).

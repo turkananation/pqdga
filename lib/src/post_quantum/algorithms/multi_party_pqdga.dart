@@ -117,7 +117,8 @@ class MultiPartyPqdga extends PQDGAAlgorithm {
     if (partyCount < 2 && partySecrets == null) {
       throw ArgumentError('multi-party requires at least 2 parties');
     }
-    final secrets = partySecrets ??
+    final secrets =
+        partySecrets ??
         List<Uint8List>.generate(
           partyCount,
           (i) => Uint8List.fromList(
@@ -167,16 +168,16 @@ class MultiPartyLabSession {
 
   /// Config with secrets only (re-combine in generator).
   MultiPartyPqdga get asSecretsOnlyConfig => MultiPartyPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        domainSeparator: algorithm.domainSeparator,
-        kdf: algorithm.kdf,
-        kmacCustomization: algorithm.kmacCustomization,
-        partySecrets: partySecrets,
-        groupId: algorithm.groupId,
-        minParties: algorithm.minParties,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    domainSeparator: algorithm.domainSeparator,
+    kdf: algorithm.kdf,
+    kmacCustomization: algorithm.kmacCustomization,
+    partySecrets: partySecrets,
+    groupId: algorithm.groupId,
+    minParties: algorithm.minParties,
+  );
 
   /// Drop one party — must fail generation (missing participant).
   MultiPartyPqdga withoutParty(int index) {

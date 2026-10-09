@@ -96,7 +96,8 @@ class HybridSharedSecretPqdga extends PQDGAAlgorithm {
     Uint8List? combinerSalt,
     String combinerProfile = 'balanced',
   }) {
-    final classical = classicalSharedSecret ??
+    final classical =
+        classicalSharedSecret ??
         Uint8List.fromList(List<int>.generate(32, (i) => 0xA0 + (i & 0x0f)));
     late final Uint8List pqSs;
     late final Uint8List? ct;
@@ -107,8 +108,10 @@ class HybridSharedSecretPqdga extends PQDGAAlgorithm {
       kemPk = null;
     } else {
       final forge = const PqForge();
-      final kp =
-          forge.generateKemKeyPair(algorithm: kemAlgorithm, seed: kemSeed);
+      final kp = forge.generateKemKeyPair(
+        algorithm: kemAlgorithm,
+        seed: kemSeed,
+      );
       final enc = forge.encapsulate(
         kp.publicKey,
         algorithm: kemAlgorithm,
@@ -181,18 +184,18 @@ class HybridSharedSecretLabSession {
 
   /// Config that re-derives the session key via combiner (no embedded session).
   HybridSharedSecretPqdga get asCombinerConfig => HybridSharedSecretPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        domainSeparator: algorithm.domainSeparator,
-        xof: algorithm.xof,
-        classicalSharedSecret: classicalSharedSecret,
-        postQuantumSharedSecret: postQuantumSharedSecret,
-        kemAlgorithm: kemAlgorithm,
-        kemCiphertext: kemCiphertext,
-        classicalAlgorithm: algorithm.classicalAlgorithm,
-        combinerInfo: algorithm.combinerInfo,
-        combinerSalt: algorithm.combinerSalt,
-        combinerProfile: algorithm.combinerProfile,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    domainSeparator: algorithm.domainSeparator,
+    xof: algorithm.xof,
+    classicalSharedSecret: classicalSharedSecret,
+    postQuantumSharedSecret: postQuantumSharedSecret,
+    kemAlgorithm: kemAlgorithm,
+    kemCiphertext: kemCiphertext,
+    classicalAlgorithm: algorithm.classicalAlgorithm,
+    combinerInfo: algorithm.combinerInfo,
+    combinerSalt: algorithm.combinerSalt,
+    combinerProfile: algorithm.combinerProfile,
+  );
 }

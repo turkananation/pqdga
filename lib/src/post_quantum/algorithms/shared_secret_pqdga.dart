@@ -2,6 +2,7 @@ import 'package:zeroize/zeroize.dart';
 import 'dart:typed_data';
 
 import 'package:pqforge/pqforge.dart';
+import 'package:pqdga/src/common/lab_key_sink.dart';
 import 'package:pqdga/src/post_quantum/crypto/dns_label_codec.dart';
 import 'package:pqdga/src/post_quantum/pqdga_core.dart';
 
@@ -78,14 +79,30 @@ class SharedSecretPqdga extends PQDGAAlgorithm {
     String charset = DnsLabelCodec.defaultCharset,
     String domainSeparator = 'pqdga/v1/shared-secret',
     String xof = 'SHAKE256',
+    LabKeySink? keySink,
   }) {
     final forge = const PqForge();
     final kp = forge.generateKemKeyPair(algorithm: algorithm, seed: kemSeed);
+    if (keySink != null) {
+      keySink.record((
+        name: 'kem-secret',
+        algorithm: algorithm.name,
+        secret: true,
+        bytes: kp.secretKey,
+      ));
+      keySink.record((
+        name: 'kem-public',
+        algorithm: algorithm.name,
+        secret: false,
+        bytes: kp.publicKey,
+      ));
+    }
     final enc = forge.encapsulate(
       kp.publicKey,
       algorithm: algorithm,
       nonce: encapsNonce,
     );
+    keySink?.finish(2);
     return SharedSecretLabSession(
       algorithm: SharedSecretPqdga(
         campaignId: campaignId,
@@ -160,14 +177,14 @@ class SharedSecretLabSession {
 
   /// Algorithm view that recovers ss via decaps only (no embedded ss field).
   SharedSecretPqdga get asDecapsConfig => SharedSecretPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        domainSeparator: algorithm.domainSeparator,
-        xof: algorithm.xof,
-        kemAlgorithm: kemAlgorithm,
-        kemCiphertext: kemCiphertext,
-        kemSecretKey: kemSecretKey,
-        kemPublicKey: kemPublicKey,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    domainSeparator: algorithm.domainSeparator,
+    xof: algorithm.xof,
+    kemAlgorithm: kemAlgorithm,
+    kemCiphertext: kemCiphertext,
+    kemSecretKey: kemSecretKey,
+    kemPublicKey: kemPublicKey,
+  );
 }

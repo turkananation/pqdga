@@ -20,17 +20,7 @@ class RanbyusDGA extends DGAAlgorithm {
   const RanbyusDGA({
     this.seed = 0xB6354BC3,
     this.variant = 'may',
-    this.tld = const [
-      'in',
-      'me',
-      'cc',
-      'su',
-      'tw',
-      'net',
-      'com',
-      'pw',
-      'org',
-    ],
+    this.tld = const ['in', 'me', 'cc', 'su', 'tw', 'net', 'com', 'pw', 'org'],
     this.domainsPerDay = 40,
   });
 }

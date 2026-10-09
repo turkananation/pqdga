@@ -55,6 +55,42 @@ public artifacts.
 Best-effort erasure, not a memory-erasure guarantee: pure Dart cannot stop the GC
 from copying a buffer and has no `mlock` equivalent.
 
+### Added
+
+- **`LabKeySink`** — an optional sink that receives generated key material as a
+  lab session is established. `SharedSecretPqdga.labEstablish` and
+  `IdentityBasedPqdga.labEstablish` take a `keySink` argument; every key they
+  generate is handed over with its name, algorithm, and whether it is secret.
+
+  ```dart
+  final session = SharedSecretPqdga.labEstablish(
+    keySink: CallbackLabKeySink(
+      (key) => keystore.put(metadataFor(key), key.bytes, unlock),
+      (count) => print('stored $count keys'),
+    ),
+  );
+  ```
+
+  Two implementations: `InMemoryLabKeySink` for a caller that wants to inspect
+  the keys, and `CallbackLabKeySink` as the integration seam.
+
+  Passing no sink changes nothing and writes nothing anywhere.
+
+- **No filesystem sink, deliberately.** pqdga does not write key bytes to disk
+  and offers no API that does. A plaintext key file is a worse custody story
+  than not persisting at all, because it looks durable while being unprotected.
+  **Custody belongs to `pqkeystore`**: wire `CallbackLabKeySink` to
+  `PqKeystore.put` and the key is sealed by the selected provider before it
+  touches storage. The sink is handed the session's own buffers, so it must copy
+  if it needs to keep them — and `dispose()` still reaches the original.
+
+  The absence is asserted: `test/lab_key_sink_test.dart` has no filesystem test,
+  because there is nothing to test.
+
+- 7 tests for the seam, including that a throwing callback aborts establishment
+  rather than silently losing a key, and that a sink receives the same buffer
+  the session later wipes.
+
 ### Note
 
 - **pubspec `description` shortened to 153 characters.** It was 271, outside

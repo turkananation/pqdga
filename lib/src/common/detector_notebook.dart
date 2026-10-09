@@ -89,27 +89,27 @@ class DetectorNotebook {
 
   /// SLH-DSA size table block for notebooks (sizes from pqcrypto params).
   static Map<String, dynamic> slhDsaSizeIocs() => {
-        'kind': 'slh_dsa_size_catalog',
-        'crypto_status': SlhDsaProvider.cryptoStatus,
-        'primitive': SlhDsaProvider.backendId,
-        'pqforge_exposes_slh_dsa': SlhDsaProvider.pqforgeExposesSlhDsa,
-        'parameter_sets': SlhDsaSizes.sizeTable(),
-        'vs_ml_dsa': SlhDsaSizes.compareToMlDsa(),
-      };
+    'kind': 'slh_dsa_size_catalog',
+    'crypto_status': SlhDsaProvider.cryptoStatus,
+    'primitive': SlhDsaProvider.backendId,
+    'pqforge_exposes_slh_dsa': SlhDsaProvider.pqforgeExposesSlhDsa,
+    'parameter_sets': SlhDsaSizes.sizeTable(),
+    'vs_ml_dsa': SlhDsaSizes.compareToMlDsa(),
+  };
 
   /// Explain why classical lines may show all-zero hardness.
   static Map<String, String> hardnessLegend() => {
-        'H1': 'Unpredictable without secret (0 = date/config public precompute)',
-        'H2': 'Unforgeable C2 / signatures required',
-        'H3': 'Forward / rotation hardness (ratchet experimental = 1)',
-        'H4': 'Hybrid classical+PQ required',
-        'H5': 'Low lexical observability (dictionary/Markov/IDN)',
-        'H6': 'Channel agility beyond DNS RPZ',
-        'H7': 'Anti-sinkhole app-level trust (sig / session)',
-        'zeros_ok':
-            'All-zero hardness is correct for trivial classical and public '
-            'QuantumResistant — teaches precompute wins and PQ hash ≠ secret',
-      };
+    'H1': 'Unpredictable without secret (0 = date/config public precompute)',
+    'H2': 'Unforgeable C2 / signatures required',
+    'H3': 'Forward / rotation hardness (ratchet experimental = 1)',
+    'H4': 'Hybrid classical+PQ required',
+    'H5': 'Low lexical observability (dictionary/Markov/IDN)',
+    'H6': 'Channel agility beyond DNS RPZ',
+    'H7': 'Anti-sinkhole app-level trust (sig / session)',
+    'zeros_ok':
+        'All-zero hardness is correct for trivial classical and public '
+        'QuantumResistant — teaches precompute wins and PQ hash ≠ secret',
+  };
 
   /// Compact CSV-ish rows for spreadsheet notebooks.
   static List<Map<String, dynamic>> hardnessRows({

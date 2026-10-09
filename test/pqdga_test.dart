@@ -8,50 +8,56 @@ import 'package:test/test.dart';
 
 void main() {
   group('Classical P0 golden vectors', () {
-    test('Locky v2 config#1 matches open-literature domains for 2016-02-24', () async {
-      final date = DateTime.utc(2016, 2, 24);
-      final result = await DGAGenerator(
-        DGAConfig(algorithm: const LockyDGA()),
-      ).generateDomains(date, 8);
+    test(
+      'Locky v2 config#1 matches open-literature domains for 2016-02-24',
+      () async {
+        final date = DateTime.utc(2016, 2, 24);
+        final result = await DGAGenerator(
+          DGAConfig(algorithm: const LockyDGA()),
+        ).generateDomains(date, 8);
 
-      expect(result.algorithm, 'Locky-v2');
-      expect(result.metadata['predictability'], 'trivial');
-      expect(result.metadata['charset'], 'a-y');
-      expect(result.domains, [
-        'nqksuqcwbfyffh.nl',
-        'iahyhfbgbkh.uk',
-        'rxcrspvpd.pw',
-        'fkurom.nl',
-        'oiplyfrbciayvuu.pm',
-        'qjqgkwgqlotxc.yt',
-        'lsuohnyjvk.eu',
-        'uqphbvjx.uk',
-      ]);
-    });
+        expect(result.algorithm, 'Locky-v2');
+        expect(result.metadata['predictability'], 'trivial');
+        expect(result.metadata['charset'], 'a-y');
+        expect(result.domains, [
+          'nqksuqcwbfyffh.nl',
+          'iahyhfbgbkh.uk',
+          'rxcrspvpd.pw',
+          'fkurom.nl',
+          'oiplyfrbciayvuu.pm',
+          'qjqgkwgqlotxc.yt',
+          'lsuohnyjvk.eu',
+          'uqphbvjx.uk',
+        ]);
+      },
+    );
 
-    test('QakBot MT19937 path matches reference for 2016-07-11 seed 0', () async {
-      final date = DateTime.utc(2016, 7, 11);
-      final result = await DGAGenerator(
-        DGAConfig(algorithm: const QakBotDGA(configSeed: 0)),
-      ).generateDomains(date, 10);
+    test(
+      'QakBot MT19937 path matches reference for 2016-07-11 seed 0',
+      () async {
+        final date = DateTime.utc(2016, 7, 11);
+        final result = await DGAGenerator(
+          DGAConfig(algorithm: const QakBotDGA(configSeed: 0)),
+        ).generateDomains(date, 10);
 
-      expect(result.algorithm, 'QakBot');
-      expect(result.seed, '1.jul.2016.00000000');
-      expect(result.metadata['predictability'], 'config-seeded');
-      expect(result.metadata['prng'], 'MT19937');
-      expect(result.domains, [
-        'slcjuisocqjwtvgtqmjqszj.com',
-        'rxpsgnfivvdeqe.com',
-        'ethhshzarzutqiid.biz',
-        'wytgqpqutnj.biz',
-        'rnpybuoayzg.org',
-        'vwdkbnrsejxgjzyra.info',
-        'gzcapifegehhyb.org',
-        'tpamjqbe.info',
-        'wrkzdoixvlu.net',
-        'yxgjkxtwwxrjupmkcxq.net',
-      ]);
-    });
+        expect(result.algorithm, 'QakBot');
+        expect(result.seed, '1.jul.2016.00000000');
+        expect(result.metadata['predictability'], 'config-seeded');
+        expect(result.metadata['prng'], 'MT19937');
+        expect(result.domains, [
+          'slcjuisocqjwtvgtqmjqszj.com',
+          'rxpsgnfivvdeqe.com',
+          'ethhshzarzutqiid.biz',
+          'wytgqpqutnj.biz',
+          'rnpybuoayzg.org',
+          'vwdkbnrsejxgjzyra.info',
+          'gzcapifegehhyb.org',
+          'tpamjqbe.info',
+          'wrkzdoixvlu.net',
+          'yxgjkxtwwxrjupmkcxq.net',
+        ]);
+      },
+    );
 
     test('Banjori mutates first four letters from seed domain', () async {
       final date = DateTime.utc(2024, 1, 1);
@@ -84,56 +90,66 @@ void main() {
       }
     });
 
-    test('Ranbyus May matches C reference for 2015-05-14 seed 0xB6354BC3', () async {
-      final date = DateTime.utc(2015, 5, 14);
-      final result = await DGAGenerator(
-        DGAConfig(algorithm: const RanbyusDGA(seed: 0xB6354BC3)),
-      ).generateDomains(date, 8);
+    test(
+      'Ranbyus May matches C reference for 2015-05-14 seed 0xB6354BC3',
+      () async {
+        final date = DateTime.utc(2015, 5, 14);
+        final result = await DGAGenerator(
+          DGAConfig(algorithm: const RanbyusDGA(seed: 0xB6354BC3)),
+        ).generateDomains(date, 8);
 
-      expect(result.algorithm, 'Ranbyus-may');
-      expect(result.metadata['predictability'], 'config-seeded');
-      expect(result.metadata['length_min'], 14);
-      expect(result.domains, [
-        'ikwoqkwuajpbyx.com',
-        'niukpdrluwlfox.pw',
-        'rcnxisuibbadng.in',
-        'wbqtidjvsdiwee.me',
-        'jrdyumcieyipnv.cc',
-        'yvyfwikedfxitk.su',
-        'tviurcntxylxnj.tw',
-        'lycyrvfcemepfm.net',
-      ]);
-    });
+        expect(result.algorithm, 'Ranbyus-may');
+        expect(result.metadata['predictability'], 'config-seeded');
+        expect(result.metadata['length_min'], 14);
+        expect(result.domains, [
+          'ikwoqkwuajpbyx.com',
+          'niukpdrluwlfox.pw',
+          'rcnxisuibbadng.in',
+          'wbqtidjvsdiwee.me',
+          'jrdyumcieyipnv.cc',
+          'yvyfwikedfxitk.su',
+          'tviurcntxylxnj.tw',
+          'lycyrvfcemepfm.net',
+        ]);
+      },
+    );
 
-    test('Suppobox two-word shuffle matches fixture wordlist + fixed unix', () async {
-      final wordsFile = File('test/fixtures/suppobox_words1.txt');
-      expect(wordsFile.existsSync(), isTrue, reason: 'fixture wordlist missing');
-      final words = wordsFile
-          .readAsLinesSync()
-          .map((l) => l.trim())
-          .where((l) => l.isNotEmpty)
-          .toList();
-      expect(words.length, greaterThanOrEqualTo(256));
+    test(
+      'Suppobox two-word shuffle matches fixture wordlist + fixed unix',
+      () async {
+        final wordsFile = File('test/fixtures/suppobox_words1.txt');
+        expect(
+          wordsFile.existsSync(),
+          isTrue,
+          reason: 'fixture wordlist missing',
+        );
+        final words = wordsFile
+            .readAsLinesSync()
+            .map((l) => l.trim())
+            .where((l) => l.isNotEmpty)
+            .toList();
+        expect(words.length, greaterThanOrEqualTo(256));
 
-      // 2016-01-01 00:00:00 UTC
-      const unix = 1451606400;
-      final result = await DGAGenerator(
-        DGAConfig(
-          algorithm: SuppoboxDGA(wordList: words, unixSeconds: unix),
-        ),
-      ).generateDomains(DateTime.utc(2016, 1, 1), 5);
+        // 2016-01-01 00:00:00 UTC
+        const unix = 1451606400;
+        final result = await DGAGenerator(
+          DGAConfig(
+            algorithm: SuppoboxDGA(wordList: words, unixSeconds: unix),
+          ),
+        ).generateDomains(DateTime.utc(2016, 1, 1), 5);
 
-      expect(result.algorithm, 'Suppobox');
-      expect(result.metadata['needs_lexical_model'], true);
-      expect(result.metadata['predictability'], 'config-seeded');
-      expect(result.domains, [
-        'figurewagon.net',
-        'thoughwagon.net',
-        'figurewithout.net',
-        'thoughwithout.net',
-        'figurekitchen.net',
-      ]);
-    });
+        expect(result.algorithm, 'Suppobox');
+        expect(result.metadata['needs_lexical_model'], true);
+        expect(result.metadata['predictability'], 'config-seeded');
+        expect(result.domains, [
+          'figurewagon.net',
+          'thoughwagon.net',
+          'figurewithout.net',
+          'thoughwithout.net',
+          'figurekitchen.net',
+        ]);
+      },
+    );
   });
 
   group('Classical baseline still dispatches', () {
@@ -175,9 +191,7 @@ void main() {
       final date = DateTime.utc(2024, 6, 15, 12);
       final result = await PQDGAGenerator(
         PQDGAConfig(
-          algorithm: const QuantumResistantPqdga(
-            campaignId: 'toy-campaign',
-          ),
+          algorithm: const QuantumResistantPqdga(campaignId: 'toy-campaign'),
           minDomainLength: 8,
           maxDomainLength: 12,
           seedRotationDays: 1,
@@ -191,10 +205,7 @@ void main() {
       expect(result.secretBound, isFalse);
       expect(result.metadata['predictability'], 'trivial');
       expect(result.metadata['seed_public'], isTrue);
-      expect(
-        result.metadata['soc_lesson'],
-        contains('PQ hash ≠ secret'),
-      );
+      expect(result.metadata['soc_lesson'], contains('PQ hash ≠ secret'));
       expect(result.metadata['playbook_flags']['sinkhole_precompute'], isTrue);
       expect(result.domains, [
         'o9pszeoaq00.net',
@@ -232,7 +243,10 @@ void main() {
     });
 
     test('PQ registry lists all implemented PQ families', () {
-      expect(PQDGAGenerator.registry.containsKey(QuantumResistantPqdga), isTrue);
+      expect(
+        PQDGAGenerator.registry.containsKey(QuantumResistantPqdga),
+        isTrue,
+      );
       expect(PQDGAGenerator.registry.containsKey(SharedSecretPqdga), isTrue);
       expect(
         PQDGAGenerator.registry.containsKey(SignatureAuthenticatedPqdga),
@@ -283,10 +297,7 @@ void main() {
       expect(result.metadata['predictability'], 'secret-seeded');
       expect(result.metadata['seed_public'], isFalse);
       expect(result.metadata['ss_resolve_path'], 'direct');
-      expect(
-        result.metadata['soc_lesson'],
-        contains('shared secret'),
-      );
+      expect(result.metadata['soc_lesson'], contains('shared secret'));
       expect(result.metadata['playbook_flags']['sinkhole_precompute'], isFalse);
       expect(
         result.metadata['playbook_flags']['needs_behavioral_detection'],
@@ -322,8 +333,9 @@ void main() {
 
     test('labEstablish encaps/decaps round-trip matches domains', () async {
       final kemSeed = Uint8List.fromList(List<int>.generate(64, (i) => i));
-      final encapsNonce =
-          Uint8List.fromList(List<int>.generate(32, (i) => 200 - i));
+      final encapsNonce = Uint8List.fromList(
+        List<int>.generate(32, (i) => 200 - i),
+      );
       final session = SharedSecretPqdga.labEstablish(
         algorithm: PqKemAlgorithm.mlKem768,
         kemSeed: kemSeed,
@@ -370,8 +382,9 @@ void main() {
           maxDomainLength: 10,
         ),
       ).generateDomains(date, 3);
-      final otherSs =
-          Uint8List.fromList(List<int>.generate(32, (i) => 255 - i));
+      final otherSs = Uint8List.fromList(
+        List<int>.generate(32, (i) => 255 - i),
+      );
       final b = await PQDGAGenerator(
         PQDGAConfig(
           algorithm: SharedSecretPqdga(sharedSecret: otherSs),
@@ -431,24 +444,18 @@ void main() {
       expect(result.predictable, isTrue);
       expect(result.secretBound, isFalse);
       expect(result.sigAlgorithm, 'ML-DSA-65');
-      expect(result.signatureLength, PqSignatureAlgorithm.mlDsa65.signatureBytes);
+      expect(
+        result.signatureLength,
+        PqSignatureAlgorithm.mlDsa65.signatureBytes,
+      );
       expect(result.signatures, isNotNull);
       expect(result.signatures, hasLength(5));
       expect(result.pubkeyFingerprint, 'c6ebc350335e2ef5ee74f8069451943d');
       expect(result.metadata['predictability'], 'trivial');
       expect(result.metadata['requires_signature'], isTrue);
-      expect(
-        result.metadata['playbook_flags']['requires_signature'],
-        isTrue,
-      );
-      expect(
-        result.metadata['playbook_flags']['sinkhole_precompute'],
-        isTrue,
-      );
-      expect(
-        result.metadata['soc_lesson'],
-        contains('ML-DSA'),
-      );
+      expect(result.metadata['playbook_flags']['requires_signature'], isTrue);
+      expect(result.metadata['playbook_flags']['sinkhole_precompute'], isTrue);
+      expect(result.metadata['soc_lesson'], contains('ML-DSA'));
       expect(result.domains, [
         'xnj7zp2ci.com',
         'nwckhhwa.net',
@@ -719,8 +726,9 @@ void main() {
     });
 
     test('HybridSharedSecret golden + combiner round-trip', () async {
-      final classical =
-          Uint8List.fromList(List<int>.generate(32, (i) => 0x10 + i));
+      final classical = Uint8List.fromList(
+        List<int>.generate(32, (i) => 0x10 + i),
+      );
       final pqSs = Uint8List.fromList(List<int>.generate(32, (i) => 0x80 + i));
       final session = HybridSharedSecretPqdga.labEstablish(
         classicalSharedSecret: classical,
@@ -861,8 +869,7 @@ void main() {
     });
 
     test('OracleSeed golden + requires material', () async {
-      final material =
-          Uint8List.fromList(List<int>.generate(32, (i) => i + 1));
+      final material = Uint8List.fromList(List<int>.generate(32, (i) => i + 1));
       final result = await DGAGenerator(
         DGAConfig(
           algorithm: OracleSeedDGA(
@@ -922,8 +929,7 @@ void main() {
         'ze9jcll5z584.net',
         '9ybxitdopt13.com',
       ]);
-      final encodings =
-          result.metadata['channel_encodings'] as List<dynamic>;
+      final encodings = result.metadata['channel_encodings'] as List<dynamic>;
       expect(encodings.first['doh'], contains('doh://'));
       expect(encodings.first['chat'], startsWith('@pqdga_'));
     });
@@ -949,9 +955,9 @@ void main() {
     final date = DateTime.utc(2024, 6, 15, 12);
 
     test('P1 Ramnit/Nymaim/Shiotob/Pykspa/Vawtrak/Emotet', () async {
-      Future<List<String>> gen(DGAAlgorithm a) async =>
-          (await DGAGenerator(DGAConfig(algorithm: a)).generateDomains(date, 5))
-              .domains;
+      Future<List<String>> gen(DGAAlgorithm a) async => (await DGAGenerator(
+        DGAConfig(algorithm: a),
+      ).generateDomains(date, 5)).domains;
 
       // Defaults are literature-perfect seeds (baderj); date 2024-06-15 pin.
       expect(await gen(const RamnitDGA()), [
@@ -1057,8 +1063,9 @@ void main() {
     final words = ['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot'];
 
     Future<List<String>> gen(DGAAlgorithm a, {int n = 3}) async =>
-        (await DGAGenerator(DGAConfig(algorithm: a)).generateDomains(date, n))
-            .domains;
+        (await DGAGenerator(
+          DGAConfig(algorithm: a),
+        ).generateDomains(date, n)).domains;
 
     test('malware-style pre-P0 families pin domains', () async {
       expect(await gen(const MatsnuDGA()), [
@@ -1164,11 +1171,7 @@ void main() {
       expect(result.metadata['decoy_domain'], isTrue);
       expect(result.metadata['envelope_payload_length'], isNotNull);
       expect(result.metadata['playbook_flags']['name_is_decoy'], isTrue);
-      expect(result.domains, [
-        '6nxm8pii.org',
-        '6j51yzmj.net',
-        '0drn2vpw.com',
-      ]);
+      expect(result.domains, ['6nxm8pii.org', '6j51yzmj.net', '0drn2vpw.com']);
       for (final d in result.domains) {
         expect(DnsLabelCodec.validateFqdn(d).isSuccess, isTrue);
       }
@@ -1200,10 +1203,7 @@ void main() {
       expect(result.metadata['capped'], isTrue);
       expect(result.metadata['effective_cap'], 2);
       expect(result.metadata['playbook_flags']['rate_limited'], isTrue);
-      expect(result.domains, [
-        'lcojbsa91x3v.com',
-        'o0jgco2z.net',
-      ]);
+      expect(result.domains, ['lcojbsa91x3v.com', 'o0jgco2z.net']);
     });
 
     test('MultiRecipient compartmentation golden', () async {
@@ -1244,7 +1244,6 @@ void main() {
     });
   });
 
-
   group('R9 binding research ladder', () {
     final fixedSs = Uint8List.fromList(List<int>.generate(32, (i) => i + 1));
     final date = DateTime.utc(2024, 6, 15, 12);
@@ -1252,9 +1251,7 @@ void main() {
     test('KMAC256 matches NIST SP 800-185 / BouncyCastle sample vectors', () {
       // NIST SP 800-185 samples (as in BouncyCastle KMACTest):
       // K = 40..5f (32 bytes), X = 00010203
-      final key = Uint8List.fromList([
-        for (var i = 0x40; i <= 0x5f; i++) i,
-      ]);
+      final key = Uint8List.fromList([for (var i = 0x40; i <= 0x5f; i++) i]);
       final data = Uint8List.fromList([0x00, 0x01, 0x02, 0x03]);
 
       // S = "My Tagged Application", L = 512 bits (64 bytes)
@@ -1272,11 +1269,7 @@ void main() {
 
       // S = empty, L = 256 bits — independent pure-Keccak reference agrees
       // with this implementation (cSHAKE256 path verified vs NIST cSHAKE sample).
-      final emptyS = Kmac256.mac(
-        key: key,
-        data: data,
-        outputLengthBytes: 32,
-      );
+      final emptyS = Kmac256.mac(key: key, data: data, outputLengthBytes: 32);
       expect(
         emptyS.map((b) => b.toRadixString(16).padLeft(2, '0')).join(),
         'b423798ac38d465560a058b982f56f7ff5d62a5cfa813ab8522998ed32e00a38',
@@ -1286,47 +1279,50 @@ void main() {
       expect(tagged.sublist(0, 32), isNot(equals(emptyS)));
     });
 
-    test('R9a KmacSharedSecret golden + differs from SHAKE SharedSecret', () async {
-      final kmac = await PQDGAGenerator(
-        PQDGAConfig(
-          algorithm: KmacSharedSecretPqdga(
-            sharedSecret: fixedSs,
-            campaignId: 'toy-campaign',
-            kemCiphertext: Uint8List(1088),
+    test(
+      'R9a KmacSharedSecret golden + differs from SHAKE SharedSecret',
+      () async {
+        final kmac = await PQDGAGenerator(
+          PQDGAConfig(
+            algorithm: KmacSharedSecretPqdga(
+              sharedSecret: fixedSs,
+              campaignId: 'toy-campaign',
+              kemCiphertext: Uint8List(1088),
+            ),
+            minDomainLength: 8,
+            maxDomainLength: 12,
+            seedRotationDays: 1,
           ),
-          minDomainLength: 8,
-          maxDomainLength: 12,
-          seedRotationDays: 1,
-        ),
-      ).generateDomains(date, 5);
+        ).generateDomains(date, 5);
 
-      final shake = await PQDGAGenerator(
-        PQDGAConfig(
-          algorithm: SharedSecretPqdga(
-            sharedSecret: fixedSs,
-            campaignId: 'toy-campaign',
-            kemCiphertext: Uint8List(1088),
+        final shake = await PQDGAGenerator(
+          PQDGAConfig(
+            algorithm: SharedSecretPqdga(
+              sharedSecret: fixedSs,
+              campaignId: 'toy-campaign',
+              kemCiphertext: Uint8List(1088),
+            ),
+            minDomainLength: 8,
+            maxDomainLength: 12,
+            seedRotationDays: 1,
           ),
-          minDomainLength: 8,
-          maxDomainLength: 12,
-          seedRotationDays: 1,
-        ),
-      ).generateDomains(date, 5);
+        ).generateDomains(date, 5);
 
-      expect(kmac.algorithm, 'KmacSharedSecret');
-      expect(kmac.xof, 'KMAC256');
-      expect(kmac.predictable, isFalse);
-      expect(kmac.secretBound, isTrue);
-      expect(kmac.kemCiphertextLength, 1088);
-      expect(kmac.metadata['binding_mode'], 'kmac-shared-secret');
-      expect(kmac.metadata['playbook_flags']['binding_ladder'], 'R9a');
-      expect(kmac.domains, isNot(equals(shake.domains)));
-      expect(kmac.domains, hasLength(5));
-      for (final d in kmac.domains) {
-        expect(DnsLabelCodec.validateFqdn(d).isSuccess, isTrue);
-      }
-      expect(kmac.seed.contains('010203'), isFalse);
-    });
+        expect(kmac.algorithm, 'KmacSharedSecret');
+        expect(kmac.xof, 'KMAC256');
+        expect(kmac.predictable, isFalse);
+        expect(kmac.secretBound, isTrue);
+        expect(kmac.kemCiphertextLength, 1088);
+        expect(kmac.metadata['binding_mode'], 'kmac-shared-secret');
+        expect(kmac.metadata['playbook_flags']['binding_ladder'], 'R9a');
+        expect(kmac.domains, isNot(equals(shake.domains)));
+        expect(kmac.domains, hasLength(5));
+        for (final d in kmac.domains) {
+          expect(DnsLabelCodec.validateFqdn(d).isSuccess, isTrue);
+        }
+        expect(kmac.seed.contains('010203'), isFalse);
+      },
+    );
 
     test('R9a KmacSharedSecret missing material throws', () async {
       await expectLater(
@@ -1339,8 +1335,9 @@ void main() {
 
     test('R9a labEstablish decaps round-trip', () async {
       final kemSeed = Uint8List.fromList(List<int>.generate(64, (i) => i + 3));
-      final encapsNonce =
-          Uint8List.fromList(List<int>.generate(32, (i) => 180 - i));
+      final encapsNonce = Uint8List.fromList(
+        List<int>.generate(32, (i) => 180 - i),
+      );
       final session = KmacSharedSecretPqdga.labEstablish(
         kemSeed: kemSeed,
         encapsNonce: encapsNonce,
@@ -1365,10 +1362,10 @@ void main() {
     });
 
     test('R9b HybridKmac golden + differs from Hybrid SHAKE', () async {
-      final classical =
-          Uint8List.fromList(List<int>.generate(32, (i) => 0xA0 + (i & 0x0f)));
-      final pqSs =
-          Uint8List.fromList(List<int>.generate(32, (i) => 0x10 + i));
+      final classical = Uint8List.fromList(
+        List<int>.generate(32, (i) => 0xA0 + (i & 0x0f)),
+      );
+      final pqSs = Uint8List.fromList(List<int>.generate(32, (i) => 0x10 + i));
       final kmacSession = HybridKmacPqdga.labEstablish(
         classicalSharedSecret: classical,
         postQuantumSharedSecret: pqSs,
@@ -1399,7 +1396,10 @@ void main() {
       expect(kmac.xof, 'KMAC256');
       expect(kmac.secretBound, isTrue);
       expect(kmac.metadata['binding_mode'], 'hybrid-kmac');
-      expect(kmac.metadata['playbook_flags']['needs_classical_and_pq_break'], isTrue);
+      expect(
+        kmac.metadata['playbook_flags']['needs_classical_and_pq_break'],
+        isTrue,
+      );
       expect(kmac.domains, isNot(equals(shake.domains)));
       expect(kmac.domains, hasLength(3));
 
@@ -1415,8 +1415,9 @@ void main() {
     });
 
     test('R9c Ratcheting advance changes names; epoch-only matches', () async {
-      final root =
-          Uint8List.fromList(List<int>.generate(32, (i) => 0xC0 + (i & 0x0f)));
+      final root = Uint8List.fromList(
+        List<int>.generate(32, (i) => 0xC0 + (i & 0x0f)),
+      );
       final s0 = RatchetingPqdga.labEstablish(rootSecret: root, epochIndex: 0);
       final s1 = s0.advance();
 
@@ -1436,10 +1437,7 @@ void main() {
       ).generateDomains(date, 3);
       final r0FromRoot = await PQDGAGenerator(
         PQDGAConfig(
-          algorithm: RatchetingPqdga(
-            rootSecret: root,
-            epochIndex: 0,
-          ),
+          algorithm: RatchetingPqdga(rootSecret: root, epochIndex: 0),
           minDomainLength: 8,
           maxDomainLength: 12,
         ),
@@ -1456,8 +1454,9 @@ void main() {
     });
 
     test('R9d Hierarchical siblings differ; leaf-only matches', () async {
-      final root =
-          Uint8List.fromList(List<int>.generate(32, (i) => 0xD0 + (i & 0x0f)));
+      final root = Uint8List.fromList(
+        List<int>.generate(32, (i) => 0xD0 + (i & 0x0f)),
+      );
       final team1 = HierarchicalPqdga.labEstablish(
         rootSecret: root,
         hierarchyPath: const ['region-a', 'team-1'],
@@ -1553,11 +1552,8 @@ void main() {
     });
 
     test('R9g AuthenticatedContext auth-only vs secret-bound', () async {
-      final sigSeed =
-          Uint8List.fromList(List<int>.generate(32, (i) => 50 + i));
-      final session = AuthenticatedContextPqdga.labEstablish(
-        sigSeed: sigSeed,
-      );
+      final sigSeed = Uint8List.fromList(List<int>.generate(32, (i) => 50 + i));
+      final session = AuthenticatedContextPqdga.labEstablish(sigSeed: sigSeed);
       final authOnly = await PQDGAGenerator(
         PQDGAConfig(
           algorithm: session.asAuthOnlyConfig,
@@ -1575,8 +1571,9 @@ void main() {
       expect(authOnly.metadata['confidentiality'], isFalse);
       expect(authOnly.pubkeyFingerprint, isNotNull);
 
-      final secret =
-          Uint8List.fromList(List<int>.generate(32, (i) => 0x30 + i));
+      final secret = Uint8List.fromList(
+        List<int>.generate(32, (i) => 0x30 + i),
+      );
       final bound = await PQDGAGenerator(
         PQDGAConfig(
           algorithm: session.withSecret(secret),
@@ -1591,7 +1588,10 @@ void main() {
     });
 
     test('R9 registry contains all binding ladder families', () {
-      expect(PQDGAGenerator.registry.containsKey(KmacSharedSecretPqdga), isTrue);
+      expect(
+        PQDGAGenerator.registry.containsKey(KmacSharedSecretPqdga),
+        isTrue,
+      );
       expect(PQDGAGenerator.registry.containsKey(HybridKmacPqdga), isTrue);
       expect(PQDGAGenerator.registry.containsKey(RatchetingPqdga), isTrue);
       expect(PQDGAGenerator.registry.containsKey(HierarchicalPqdga), isTrue);
@@ -1620,7 +1620,10 @@ void main() {
       expect(ioc['algorithm'], r.algorithm);
       expect(ioc['predictability'], r.metadata['predictability']);
       final hard = HardnessScorecard.fromDgaResult(r);
-      expect(hard.scores.keys, containsAll(['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7']));
+      expect(
+        hard.scores.keys,
+        containsAll(['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7']),
+      );
     }
 
     test('baseline malware-style emit full SOC metadata', () async {
@@ -1641,7 +1644,8 @@ void main() {
       }
       expect(samples.first.metadata['predictability'], 'trivial');
       expect(
-        (samples.first.metadata['playbook_flags'] as Map)['sinkhole_precompute'],
+        (samples.first.metadata['playbook_flags']
+            as Map)['sinkhole_precompute'],
         isTrue,
       );
     });
@@ -1769,53 +1773,46 @@ void main() {
       );
     });
 
-    test(
-      'SlhDsaCheckpoint real pqcrypto FIPS 205 seal + size IOC',
-      () async {
-        final session = SlhDsaCheckpointPqdga.labEstablish(
-          parameterSet: SlhDsaSizes.slhDsaShake_128f,
-          campaignId: 'slh-lab',
-          checkpointEvery: 1,
-        );
-        final r = await PQDGAGenerator(
-          PQDGAConfig(
-            algorithm: session.algorithm,
-            minDomainLength: 8,
-            maxDomainLength: 12,
-          ),
-        ).generateDomains(date, 1);
-        expect(r.algorithm, 'SlhDsaCheckpoint');
-        expect(r.sigAlgorithm, SlhDsaSizes.slhDsaShake_128f.name);
-        expect(
-          r.signatureLength,
-          SlhDsaSizes.slhDsaShake_128f.signatureBytes,
-        );
-        expect(r.signatures, isNotNull);
-        expect(r.signatures!, hasLength(1));
-        expect(
-          r.signatures!.first.length,
-          SlhDsaSizes.slhDsaShake_128f.signatureBytes,
-        );
-        expect(r.metadata['slh_dsa_crypto'], 'fips-205-pqcrypto');
-        expect(r.metadata['primitive'], 'pqcrypto.SlhDsa');
-        expect(
-          session.verify(
-            domain: r.domains.first,
-            epoch: r.epoch!,
-            counter: 0,
-            signature: r.signatures!.first,
-          ),
-          isTrue,
-        );
-        final hard = HardnessScorecard.fromPqdgaResult(r);
-        expect(hard.h2, 2);
-        expect(hard.counters, contains('slh_dsa_size_ioc'));
-        final catalog = DetectorNotebook.slhDsaSizeIocs();
-        expect(catalog['crypto_status'], 'fips-205-pqcrypto');
-        expect(catalog['parameter_sets'], isNotEmpty);
-      },
-      timeout: Timeout(Duration(minutes: 2)),
-    );
+    test('SlhDsaCheckpoint real pqcrypto FIPS 205 seal + size IOC', () async {
+      final session = SlhDsaCheckpointPqdga.labEstablish(
+        parameterSet: SlhDsaSizes.slhDsaShake_128f,
+        campaignId: 'slh-lab',
+        checkpointEvery: 1,
+      );
+      final r = await PQDGAGenerator(
+        PQDGAConfig(
+          algorithm: session.algorithm,
+          minDomainLength: 8,
+          maxDomainLength: 12,
+        ),
+      ).generateDomains(date, 1);
+      expect(r.algorithm, 'SlhDsaCheckpoint');
+      expect(r.sigAlgorithm, SlhDsaSizes.slhDsaShake_128f.name);
+      expect(r.signatureLength, SlhDsaSizes.slhDsaShake_128f.signatureBytes);
+      expect(r.signatures, isNotNull);
+      expect(r.signatures!, hasLength(1));
+      expect(
+        r.signatures!.first.length,
+        SlhDsaSizes.slhDsaShake_128f.signatureBytes,
+      );
+      expect(r.metadata['slh_dsa_crypto'], 'fips-205-pqcrypto');
+      expect(r.metadata['primitive'], 'pqcrypto.SlhDsa');
+      expect(
+        session.verify(
+          domain: r.domains.first,
+          epoch: r.epoch!,
+          counter: 0,
+          signature: r.signatures!.first,
+        ),
+        isTrue,
+      );
+      final hard = HardnessScorecard.fromPqdgaResult(r);
+      expect(hard.h2, 2);
+      expect(hard.counters, contains('slh_dsa_size_ioc'));
+      final catalog = DetectorNotebook.slhDsaSizeIocs();
+      expect(catalog['crypto_status'], 'fips-205-pqcrypto');
+      expect(catalog['parameter_sets'], isNotEmpty);
+    }, timeout: Timeout(Duration(minutes: 2)));
 
     test('SlhDsaCheckpoint missing key throws when required', () async {
       expect(
@@ -1832,8 +1829,9 @@ void main() {
 
     test('HybridAuthenticated dual-sign via PqForgeHybridSigner', () async {
       final pqcSeed = Uint8List.fromList(List<int>.generate(32, (i) => i + 3));
-      final classicalSeed =
-          Uint8List.fromList(List<int>.generate(32, (i) => 0x80 + i));
+      final classicalSeed = Uint8List.fromList(
+        List<int>.generate(32, (i) => 0x80 + i),
+      );
       final session = await HybridAuthenticatedPqdga.labEstablish(
         pqcSeed: pqcSeed,
         classicalSeed: classicalSeed,
@@ -1865,113 +1863,128 @@ void main() {
       expect(hard.h4, 2);
     });
 
-    test('PostRendezvousSession AEAD round-trip via PqForgeSecureSession',
-        () async {
-      final ss = Uint8List.fromList(List<int>.generate(32, (i) => 0x11 + i));
-      final shared = await PQDGAGenerator(
-        PQDGAConfig(
-          algorithm: SharedSecretPqdga(
-            sharedSecret: ss,
-            kemCiphertext: Uint8List(1088),
-            campaignId: 'sess',
+    test(
+      'PostRendezvousSession AEAD round-trip via PqForgeSecureSession',
+      () async {
+        final ss = Uint8List.fromList(List<int>.generate(32, (i) => 0x11 + i));
+        final shared = await PQDGAGenerator(
+          PQDGAConfig(
+            algorithm: SharedSecretPqdga(
+              sharedSecret: ss,
+              kemCiphertext: Uint8List(1088),
+              campaignId: 'sess',
+            ),
+            minDomainLength: 8,
+            maxDomainLength: 10,
           ),
-          minDomainLength: 8,
-          maxDomainLength: 10,
-        ),
-      ).generateDomains(date, 1);
-      final session = PostRendezvousSession.fromPqdgaResult(shared, ss);
-      final payload = Uint8List.fromList('lab-app-payload'.codeUnits);
-      expect(await session.roundTripOk(payload), isTrue);
-      final packet = await session.seal(payload);
-      final notebook = DetectorNotebook.withPostRendezvous(
-        shared,
-        session,
-        lastPacketLength: packet.length,
-      );
-      expect(notebook['post_rendezvous']['not_a_dga'], isTrue);
-      expect(notebook['post_rendezvous']['cipher_suite'], isNotNull);
-      session.dispose();
-    });
+        ).generateDomains(date, 1);
+        final session = PostRendezvousSession.fromPqdgaResult(shared, ss);
+        final payload = Uint8List.fromList('lab-app-payload'.codeUnits);
+        expect(await session.roundTripOk(payload), isTrue);
+        final packet = await session.seal(payload);
+        final notebook = DetectorNotebook.withPostRendezvous(
+          shared,
+          session,
+          lastPacketLength: packet.length,
+        );
+        expect(notebook['post_rendezvous']['not_a_dga'], isTrue);
+        expect(notebook['post_rendezvous']['cipher_suite'], isNotNull);
+        session.dispose();
+      },
+    );
 
-    test('BindingAnalysis suite + LabHarness + LiteratureCorpus smoke',
-        () async {
-      final suite = await BindingAnalysis.runAll();
-      expect(suite['suite'], 'binding_ladder_analysis');
-      final kmac = suite['experiments']['kmac_vs_shake'] as Map;
-      expect(kmac['outputs_differ'], isTrue);
-      final ratchet = suite['experiments']['ratchet_delete_forward'] as Map;
-      expect(ratchet['later_key_reconstructs_earlier_names'], isFalse);
-      expect(BindingAnalysis.writeups().keys, contains('R9a_kmac_vs_R4_shake'));
+    test(
+      'BindingAnalysis suite + LabHarness + LiteratureCorpus smoke',
+      () async {
+        final suite = await BindingAnalysis.runAll();
+        expect(suite['suite'], 'binding_ladder_analysis');
+        final kmac = suite['experiments']['kmac_vs_shake'] as Map;
+        expect(kmac['outputs_differ'], isTrue);
+        final ratchet = suite['experiments']['ratchet_delete_forward'] as Map;
+        expect(ratchet['later_key_reconstructs_earlier_names'], isFalse);
+        expect(
+          BindingAnalysis.writeups().keys,
+          contains('R9a_kmac_vs_R4_shake'),
+        );
 
-      final buckets = LabHarness.epochBucketsInRange(
-        DateTime.utc(2024, 1, 1),
-        DateTime.utc(2024, 1, 10),
-        rotationDays: 3,
-      );
-      expect(buckets, isNotEmpty);
-      expect(LabHarness.memoizedEntropy('example.com'), greaterThan(0));
-      expect(
-        LabHarness.dateRangeDayCount(
+        final buckets = LabHarness.epochBucketsInRange(
+          DateTime.utc(2024, 1, 1),
+          DateTime.utc(2024, 1, 10),
+          rotationDays: 3,
+        );
+        expect(buckets, isNotEmpty);
+        expect(LabHarness.memoizedEntropy('example.com'), greaterThan(0));
+        expect(
+          LabHarness.dateRangeDayCount(
+            DateTime.utc(2024, 1, 1),
+            DateTime.utc(2024, 1, 3),
+          ),
+          3,
+        );
+        final cronHits = LabHarness.cronMatchesInRange(
+          '0 0 * * *',
           DateTime.utc(2024, 1, 1),
           DateTime.utc(2024, 1, 3),
-        ),
-        3,
-      );
-      final cronHits = LabHarness.cronMatchesInRange(
-        '0 0 * * *',
-        DateTime.utc(2024, 1, 1),
-        DateTime.utc(2024, 1, 3),
-      );
-      expect(cronHits, isNotEmpty);
+        );
+        expect(cronHits, isNotEmpty);
 
-      LabHarness.enableLogCapture();
-      LabHarness.logEvent('unit_test_event', fields: {'ok': true});
-      expect(LabHarness.logCapture, isNotEmpty);
-      LabHarness.disableLogCapture();
+        LabHarness.enableLogCapture();
+        LabHarness.logEvent('unit_test_event', fields: {'ok': true});
+        expect(LabHarness.logCapture, isNotEmpty);
+        LabHarness.disableLogCapture();
 
-      final note = LiteratureCorpus.find('Ramnit');
-      expect(note, isNotNull);
-      expect(note!.fidelity, 'literature-perfect');
-      expect(LiteratureCorpus.rekeyChecklist('Ramnit'), isNotEmpty);
-      expect(SlhDsaProvider.pqforgeExposesSlhDsa, isFalse);
-      expect(SlhDsaProvider.backendId, 'pqcrypto.SlhDsa');
-    });
+        final note = LiteratureCorpus.find('Ramnit');
+        expect(note, isNotNull);
+        expect(note!.fidelity, 'literature-perfect');
+        expect(LiteratureCorpus.rekeyChecklist('Ramnit'), isNotEmpty);
+        expect(SlhDsaProvider.pqforgeExposesSlhDsa, isFalse);
+        expect(SlhDsaProvider.backendId, 'pqcrypto.SlhDsa');
+      },
+    );
 
-    test('NotebookConsumer wires DetectorNotebook + hardness + SLH catalog',
-        () async {
-      final dga = await DGAGenerator(
-        DGAConfig(algorithm: const RamnitDGA()),
-      ).generateDomains(DateTime.utc(2015, 5, 14), 3);
-      final pack = NotebookConsumer.consumeDga(dga);
-      expect(pack['consumer'], 'NotebookConsumer.consumeDga');
-      expect(pack['notebook']['kind'], 'classical');
-      expect(pack['hardness_scorecard']['hardness'], isNotNull);
-      expect(pack['literature']['fidelity'], 'literature-perfect');
-      expect(pack['codec_pipeline_rows'], hasLength(3));
+    test(
+      'NotebookConsumer wires DetectorNotebook + hardness + SLH catalog',
+      () async {
+        final dga = await DGAGenerator(
+          DGAConfig(algorithm: const RamnitDGA()),
+        ).generateDomains(DateTime.utc(2015, 5, 14), 3);
+        final pack = NotebookConsumer.consumeDga(dga);
+        expect(pack['consumer'], 'NotebookConsumer.consumeDga');
+        expect(pack['notebook']['kind'], 'classical');
+        expect(pack['hardness_scorecard']['hardness'], isNotNull);
+        expect(pack['literature']['fidelity'], 'literature-perfect');
+        expect(pack['codec_pipeline_rows'], hasLength(3));
 
-      final ss = Uint8List.fromList(List<int>.generate(32, (i) => i + 1));
-      final pq = await PQDGAGenerator(
-        PQDGAConfig(
-          algorithm: SharedSecretPqdga(
-            sharedSecret: ss,
-            kemCiphertext: Uint8List(1088),
+        final ss = Uint8List.fromList(List<int>.generate(32, (i) => i + 1));
+        final pq = await PQDGAGenerator(
+          PQDGAConfig(
+            algorithm: SharedSecretPqdga(
+              sharedSecret: ss,
+              kemCiphertext: Uint8List(1088),
+            ),
+            minDomainLength: 8,
+            maxDomainLength: 10,
           ),
-          minDomainLength: 8,
-          maxDomainLength: 10,
-        ),
-      ).generateDomains(date, 2);
-      final pqPack = NotebookConsumer.consumePqdga(pq, includeSlhCatalog: true);
-      expect(pqPack['notebook']['kind'], 'post_quantum');
-      expect(pqPack['slh_dsa_size_iocs']['crypto_status'], 'fips-205-pqcrypto');
+        ).generateDomains(date, 2);
+        final pqPack = NotebookConsumer.consumePqdga(
+          pq,
+          includeSlhCatalog: true,
+        );
+        expect(pqPack['notebook']['kind'], 'post_quantum');
+        expect(
+          pqPack['slh_dsa_size_iocs']['crypto_status'],
+          'fips-205-pqcrypto',
+        );
 
-      final catalog = NotebookConsumer.consumeSlhSizeCatalog();
-      expect(catalog['catalog']['parameter_sets'], isNotEmpty);
-      expect(catalog['catalog']['pqforge_exposes_slh_dsa'], isFalse);
+        final catalog = NotebookConsumer.consumeSlhSizeCatalog();
+        expect(catalog['catalog']['parameter_sets'], isNotEmpty);
+        expect(catalog['catalog']['pqforge_exposes_slh_dsa'], isFalse);
 
-      final analysis = await NotebookConsumer.consumeBindingAnalysis();
-      expect(analysis['writeups'], isNotEmpty);
-      expect(analysis['suite']['experiments'], isNotEmpty);
-    });
+        final analysis = await NotebookConsumer.consumeBindingAnalysis();
+        expect(analysis['writeups'], isNotEmpty);
+        expect(analysis['suite']['experiments'], isNotEmpty);
+      },
+    );
 
     test('Registry contains post-R9 extras', () {
       expect(
@@ -1989,8 +2002,9 @@ void main() {
     final pin = DateTime.utc(2015, 5, 14);
 
     Future<List<String>> gen(DGAAlgorithm a, {int n = 5}) async =>
-        (await DGAGenerator(DGAConfig(algorithm: a)).generateDomains(pin, n))
-            .domains;
+        (await DGAGenerator(
+          DGAConfig(algorithm: a),
+        ).generateDomains(pin, n)).domains;
 
     test('Ramnit Park–Miller known seed', () async {
       final d = await gen(const RamnitDGA());
@@ -2001,8 +2015,9 @@ void main() {
         'kihjtklbkgdn.bid',
         'obmyqaflbudqfssibeb.click',
       ]);
-      final r = await DGAGenerator(DGAConfig(algorithm: const RamnitDGA()))
-          .generateDomains(pin, 1);
+      final r = await DGAGenerator(
+        DGAConfig(algorithm: const RamnitDGA()),
+      ).generateDomains(pin, 1);
       expect(r.metadata['fidelity'], 'literature-perfect');
       expect(r.metadata['literature'], contains('baderj'));
     });
@@ -2092,20 +2107,24 @@ void main() {
     });
 
     test('Torpig window model stable within week', () async {
-      final a = await DGAGenerator(DGAConfig(algorithm: const TorpigDGA()))
-          .generateDomains(DateTime.utc(2024, 6, 10), 3);
-      final b = await DGAGenerator(DGAConfig(algorithm: const TorpigDGA()))
-          .generateDomains(DateTime.utc(2024, 6, 12), 3);
-      final c = await DGAGenerator(DGAConfig(algorithm: const TorpigDGA()))
-          .generateDomains(DateTime.utc(2024, 6, 17), 3);
+      final a = await DGAGenerator(
+        DGAConfig(algorithm: const TorpigDGA()),
+      ).generateDomains(DateTime.utc(2024, 6, 10), 3);
+      final b = await DGAGenerator(
+        DGAConfig(algorithm: const TorpigDGA()),
+      ).generateDomains(DateTime.utc(2024, 6, 12), 3);
+      final c = await DGAGenerator(
+        DGAConfig(algorithm: const TorpigDGA()),
+      ).generateDomains(DateTime.utc(2024, 6, 17), 3);
       expect(a.domains, b.domains);
       expect(a.domains, isNot(equals(c.domains)));
       expect(a.metadata['fidelity'], 'research-model');
     });
 
     test('Emotet remains research-model volume family', () async {
-      final r = await DGAGenerator(DGAConfig(algorithm: const EmotetDGA()))
-          .generateDomains(pin, 5);
+      final r = await DGAGenerator(
+        DGAConfig(algorithm: const EmotetDGA()),
+      ).generateDomains(pin, 5);
       expect(r.domains, hasLength(5));
       expect(r.metadata['fidelity'], 'research-model');
       expect(r.metadata['literature'], contains('research-model'));

@@ -188,11 +188,10 @@ class ThresholdPqdga extends PQDGAAlgorithm {
     String groupId = 'lab-threshold',
   }) {
     if (threshold < 1 || threshold > totalShares) {
-      throw ArgumentError(
-        'threshold $threshold must be in 1..$totalShares',
-      );
+      throw ArgumentError('threshold $threshold must be in 1..$totalShares');
     }
-    final m = master ??
+    final m =
+        master ??
         Uint8List.fromList(List<int>.generate(32, (i) => 0xE0 + (i & 0x0f)));
     final all = dealShares(
       master: m,

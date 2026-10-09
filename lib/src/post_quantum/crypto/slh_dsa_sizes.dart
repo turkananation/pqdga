@@ -13,7 +13,6 @@ library;
 // (see the note in pqforge's barrel doc), so import pqcrypto directly.
 import 'package:pqcrypto/pqcrypto.dart';
 
-
 /// One SLH-DSA parameter set for lab IOC / algorithm config.
 ///
 /// Wraps [SlhDsaParams] so callers can stay on a stable pqdga surface.
@@ -149,19 +148,19 @@ class SlhDsaSizes {
 
   /// Compact size table for IOC notebooks / hardness docs.
   static List<Map<String, Object>> sizeTable() => [
-        for (final p in all)
-          {
-            'id': p.id,
-            'name': p.name,
-            'category': p.securityCategory,
-            'pk_bytes': p.publicKeyBytes,
-            'sk_bytes': p.secretKeyBytes,
-            'sig_bytes': p.signatureBytes,
-            'is_fast': p.isFast,
-            'hash_family': p.hashFamily.name,
-            'primitive': 'pqcrypto.SlhDsa',
-          },
-      ];
+    for (final p in all)
+      {
+        'id': p.id,
+        'name': p.name,
+        'category': p.securityCategory,
+        'pk_bytes': p.publicKeyBytes,
+        'sk_bytes': p.secretKeyBytes,
+        'sig_bytes': p.signatureBytes,
+        'is_fast': p.isFast,
+        'hash_family': p.hashFamily.name,
+        'primitive': 'pqcrypto.SlhDsa',
+      },
+  ];
 
   /// Compare ML-DSA vs SLH-DSA signature lengths (IOC training).
   static Map<String, Object> compareToMlDsa({
@@ -169,17 +168,14 @@ class SlhDsaSizes {
     int mlDsa65 = 3309,
     int mlDsa87 = 4627,
     SlhDsaParameterSet slh = defaultSet,
-  }) =>
-      {
-        'ml_dsa_44_sig': mlDsa44,
-        'ml_dsa_65_sig': mlDsa65,
-        'ml_dsa_87_sig': mlDsa87,
-        'slh_dsa_id': slh.id,
-        'slh_dsa_sig': slh.signatureBytes,
-        'slh_vs_ml_dsa_65_ratio':
-            (slh.signatureBytes / mlDsa65).toStringAsFixed(2),
-        'note':
-            'SLH-DSA sigs are multi-KB → excellent passive size IOCs vs ML-DSA',
-        'primitive': 'pqcrypto.SlhDsa',
-      };
+  }) => {
+    'ml_dsa_44_sig': mlDsa44,
+    'ml_dsa_65_sig': mlDsa65,
+    'ml_dsa_87_sig': mlDsa87,
+    'slh_dsa_id': slh.id,
+    'slh_dsa_sig': slh.signatureBytes,
+    'slh_vs_ml_dsa_65_ratio': (slh.signatureBytes / mlDsa65).toStringAsFixed(2),
+    'note': 'SLH-DSA sigs are multi-KB → excellent passive size IOCs vs ML-DSA',
+    'primitive': 'pqcrypto.SlhDsa',
+  };
 }

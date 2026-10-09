@@ -110,20 +110,20 @@ class PostRendezvousSession {
 
   /// Non-secret IOC / notebook summary (never includes key bytes).
   Map<String, dynamic> iocTemplate({int? lastPacketLength}) => {
-        'phase': 'post_rendezvous',
-        'not_a_dga': true,
-        'cipher_suite': cipherSuite.id,
-        'cipher_suite_display': cipherSuite.displayName,
-        'engine': engineProvider.name,
-        'key_length': 32,
-        'aad_context': associatedContext,
-        'nonce_length': cipherSuite.nonceLength,
-        'tag_length': cipherSuite.tagLength,
-        'last_packet_length': ?lastPacketLength,
-        'soc_lesson':
-            'Sinkhole IP alone fails if bot requires AEAD session after DGA',
-        'hardness_h7': 2,
-      };
+    'phase': 'post_rendezvous',
+    'not_a_dga': true,
+    'cipher_suite': cipherSuite.id,
+    'cipher_suite_display': cipherSuite.displayName,
+    'engine': engineProvider.name,
+    'key_length': 32,
+    'aad_context': associatedContext,
+    'nonce_length': cipherSuite.nonceLength,
+    'tag_length': cipherSuite.tagLength,
+    'last_packet_length': ?lastPacketLength,
+    'soc_lesson':
+        'Sinkhole IP alone fails if bot requires AEAD session after DGA',
+    'hardness_h7': 2,
+  };
 
   /// Wipe session key material.
   ///
