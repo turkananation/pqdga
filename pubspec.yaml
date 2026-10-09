@@ -2,6 +2,7 @@ name: pqdga
 description: >-
   Defensive-research framework for deterministic domain-generation algorithms,
   studying how post-quantum primitives change their predictability properties.
+  Lab kit for SOC and IR.
 version: 0.2.0
 repository: https://github.com/turkananation/pqdga
 homepage: https://turkananation.github.io/pqdga/

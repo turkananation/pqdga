@@ -1,0 +1,83 @@
+name: CI
+
+# pqdga had no CI at all before this file. It is a dependency of nothing else
+# in the workspace, but it is published, so a regression here is a regression
+# every consumer sees on their next `pub upgrade`.
+#
+# The gates mirror the AGENTS.md rules that are mechanically checkable:
+#   - dart analyze --fatal-infos clean
+#   - dart test
+#   - the pub-points floor (advisory, see below)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Analyze and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Dart SDK
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Analyze
+        run: dart analyze --fatal-infos
+
+      - name: Run tests
+        run: dart test
+
+  # Pub-points gate. Fails if the package drops below MIN_POINTS/160.
+  #
+  # continue-on-error so a pub.dev criteria change or a pana release cannot
+  # block a merge on a technicality. It is still reported on every PR so a real
+  # regression is visible in the checks list.
+  pub-points:
+    name: Pub points (advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Dart SDK
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Cache pub cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: pub-points-${{ runner.os }}-${{ hashFiles('pubspec.yaml') }}
+          restore-keys: pub-points-${{ runner.os }}-
+
+      - name: Install pana
+        run: dart pub global activate pana
+
+      - name: Score with pana
+        env:
+          MIN_POINTS: '160'
+          REPORT: pana-report.txt
+        run: ./tool/pana_gate.sh
+
+      - name: Publish report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pana-report
+          path: pana-report.txt
+          if-no-files-found: ignore
