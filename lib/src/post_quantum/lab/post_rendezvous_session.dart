@@ -1,3 +1,8 @@
+// Prefixed deliberately: pqcrypto also exports a symbol named secureZero,
+// and its implementation is a plain loop without the DSE guard. Under
+// 'pub downgrade' both become visible through pqforge and the plain
+// import becomes AMBIGUOUS_IMPORT. This must be the hardened one.
+import 'package:zeroize/zeroize.dart' as zeroize;
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -109,25 +114,32 @@ class PostRendezvousSession {
 
   /// Non-secret IOC / notebook summary (never includes key bytes).
   Map<String, dynamic> iocTemplate({int? lastPacketLength}) => {
-        'phase': 'post_rendezvous',
-        'not_a_dga': true,
-        'cipher_suite': cipherSuite.id,
-        'cipher_suite_display': cipherSuite.displayName,
-        'engine': engineProvider.name,
-        'key_length': 32,
-        'aad_context': associatedContext,
-        'nonce_length': cipherSuite.nonceLength,
-        'tag_length': cipherSuite.tagLength,
-        'last_packet_length': ?lastPacketLength,
-        'soc_lesson':
-            'Sinkhole IP alone fails if bot requires AEAD session after DGA',
-        'hardness_h7': 2,
-      };
+    'phase': 'post_rendezvous',
+    'not_a_dga': true,
+    'cipher_suite': cipherSuite.id,
+    'cipher_suite_display': cipherSuite.displayName,
+    'engine': engineProvider.name,
+    'key_length': 32,
+    'aad_context': associatedContext,
+    'nonce_length': cipherSuite.nonceLength,
+    'tag_length': cipherSuite.tagLength,
+    'last_packet_length': ?lastPacketLength,
+    'soc_lesson':
+        'Sinkhole IP alone fails if bot requires AEAD session after DGA',
+    'hardness_h7': 2,
+  };
 
   /// Wipe session key material.
+  ///
+  /// Uses `package:zeroize`'s `secureZero`, which is
+  /// `@pragma('vm:never-inline')` and anchors the writes with opaque reads, so
+  /// they survive Dead Store Elimination in AOT. A `fillRange(0, n, 0)` loop
+  /// does not, which is what this replaced.
+  ///
+  /// Safe to call more than once.
   void dispose() {
     _session?.dispose();
     _session = null;
-    sessionKey.fillRange(0, sessionKey.length, 0);
+    zeroize.secureZero(sessionKey);
   }
 }

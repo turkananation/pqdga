@@ -17,9 +17,11 @@ class ClassicalSocMetadata {
     bool needsFluxCorrelation = false,
     bool requiresSignature = false,
   }) {
-    final configExtract = needsConfigExtract ||
+    final configExtract =
+        needsConfigExtract ||
         predictability == PredictabilityClass.configSeeded;
-    final sinkhole = predictability == PredictabilityClass.trivial ||
+    final sinkhole =
+        predictability == PredictabilityClass.trivial ||
         predictability == PredictabilityClass.configSeeded;
     return {
       'sinkhole_precompute': sinkhole,
@@ -27,7 +29,7 @@ class ClassicalSocMetadata {
       'needs_lexical_model': needsLexicalModel,
       'needs_behavioral_detection':
           predictability == PredictabilityClass.secretSeeded ||
-              predictability == PredictabilityClass.oracleSeeded,
+          predictability == PredictabilityClass.oracleSeeded,
       'needs_oracle_feed': predictability == PredictabilityClass.oracleSeeded,
       'requires_signature': requiresSignature,
       if (needsAltChannelTelemetry) 'needs_alt_channel_telemetry': true,
@@ -110,10 +112,11 @@ class ClassicalSocMetadata {
   }) {
     final base = build(
       predictability: predictability,
-      needsLexicalModel: needsLexicalModel ||
-          existing['needs_lexical_model'] == true,
+      needsLexicalModel:
+          needsLexicalModel || existing['needs_lexical_model'] == true,
       needsConfigExtract: needsConfigExtract,
-      needsAltChannelTelemetry: needsAltChannelTelemetry ||
+      needsAltChannelTelemetry:
+          needsAltChannelTelemetry ||
           existing['needs_alt_channel_telemetry'] == true,
       needsIdnMonitoring: needsIdnMonitoring,
       needsFluxCorrelation: needsFluxCorrelation,

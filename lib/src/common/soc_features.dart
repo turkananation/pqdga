@@ -56,18 +56,18 @@ class DomainFeatures {
   });
 
   Map<String, dynamic> toJson() => {
-        'domain': domain,
-        'fqdn_length': fqdnLength,
-        'label_length': labelLength,
-        'entropy': entropy,
-        'hex_ratio': hexRatio,
-        'digit_ratio': digitRatio,
-        'vowel_consonant_transitions': vowelConsonantTransitions,
-        'tld': tld,
-        'subdomain_depth': subdomainDepth,
-        'idn': idn,
-        'charset_class': charsetClass,
-      };
+    'domain': domain,
+    'fqdn_length': fqdnLength,
+    'label_length': labelLength,
+    'entropy': entropy,
+    'hex_ratio': hexRatio,
+    'digit_ratio': digitRatio,
+    'vowel_consonant_transitions': vowelConsonantTransitions,
+    'tld': tld,
+    'subdomain_depth': subdomainDepth,
+    'idn': idn,
+    'charset_class': charsetClass,
+  };
 }
 
 /// Batch / campaign-level features over a domain list.
@@ -116,20 +116,20 @@ class BatchFeatures {
   });
 
   Map<String, dynamic> toJson() => {
-        'domain_count': domainCount,
-        'tld_diversity': tldDiversity,
-        'length_histogram': {
-          for (final e in lengthHistogram.entries) '${e.key}': e.value,
-        },
-        'mean_entropy': meanEntropy,
-        'mean_digit_ratio': meanDigitRatio,
-        'idn_ratio': idnRatio,
-        if (expectedNxdomainRatio != null)
-          'expected_nxdomain_ratio': expectedNxdomainRatio,
-        if (predictability != null) 'predictability': predictability,
-        if (predictable != null) 'predictable': predictable,
-        if (secretBound != null) 'secret_bound': secretBound,
-      };
+    'domain_count': domainCount,
+    'tld_diversity': tldDiversity,
+    'length_histogram': {
+      for (final e in lengthHistogram.entries) '${e.key}': e.value,
+    },
+    'mean_entropy': meanEntropy,
+    'mean_digit_ratio': meanDigitRatio,
+    'idn_ratio': idnRatio,
+    if (expectedNxdomainRatio != null)
+      'expected_nxdomain_ratio': expectedNxdomainRatio,
+    if (predictability != null) 'predictability': predictability,
+    if (predictable != null) 'predictable': predictable,
+    if (secretBound != null) 'secret_bound': secretBound,
+  };
 }
 
 /// SOC feature extraction helpers (R7).
@@ -140,8 +140,9 @@ class SocFeatures {
 
   /// Extract features for a single domain or abstract id.
   static DomainFeatures forDomain(String domain) {
-    final cleaned =
-        domain.endsWith('.') ? domain.substring(0, domain.length - 1) : domain;
+    final cleaned = domain.endsWith('.')
+        ? domain.substring(0, domain.length - 1)
+        : domain;
     final labels = cleaned.split('.');
     final label = labels.isNotEmpty ? labels.first : cleaned;
     final tld = labels.length >= 2 ? labels.last.toLowerCase() : '';
@@ -228,7 +229,8 @@ class SocFeatures {
       expectedNxdomainRatio: expectedNxdomainRatio,
       predictability: meta['predictability']?.toString(),
       predictable: meta['predictable'] as bool?,
-      secretBound: meta['secret_bound'] as bool? ?? meta['secretBound'] as bool?,
+      secretBound:
+          meta['secret_bound'] as bool? ?? meta['secretBound'] as bool?,
     );
   }
 
@@ -241,12 +243,13 @@ class SocFeatures {
     return forBatch(
       result.domains,
       expectedNxdomainRatio: expectedNxdomainRatio,
-      predictability: metaPred ??
+      predictability:
+          metaPred ??
           (result.secretBound
               ? PredictabilityClass.secretSeeded.wireName
               : result.predictable
-                  ? PredictabilityClass.trivial.wireName
-                  : null),
+              ? PredictabilityClass.trivial.wireName
+              : null),
       predictable: result.predictable,
       secretBound: result.secretBound,
     );

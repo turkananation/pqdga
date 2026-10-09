@@ -61,10 +61,7 @@ class LabHarness {
   static void disableLogCapture() => _captureEnabled = false;
 
   /// Cron-like bucket id for a wall clock (delegates to [EpochBucket]).
-  static String cronEpochBucket(
-    DateTime date, {
-    int rotationDays = 1,
-  }) =>
+  static String cronEpochBucket(DateTime date, {int rotationDays = 1}) =>
       EpochBucket.idFor(date, rotationDays);
 
   /// Date-range coverage of epoch buckets between [start] and [end] inclusive.
@@ -116,8 +113,11 @@ class LabHarness {
       if (expr.matches(cursor)) {
         out.add(cursor);
         // Advance to next day after a match at midnight-style schedules.
-        cursor = DateTime.utc(cursor.year, cursor.month, cursor.day)
-            .add(const Duration(days: 1));
+        cursor = DateTime.utc(
+          cursor.year,
+          cursor.month,
+          cursor.day,
+        ).add(const Duration(days: 1));
       } else {
         cursor = cursor.add(const Duration(minutes: 1));
       }
@@ -127,34 +127,32 @@ class LabHarness {
 
   /// Bulk-encode domain labels through a multi-stage [CodecPipeline].
   static List<Map<String, dynamic>> codecPipelineBulk(List<String> domains) {
-    final pipeline = CodecPipeline<String, String>(
-      (d) => d.trim().toLowerCase(),
-      name: 'lower_trim',
-    )
-        .then<Map<String, dynamic>>(
-          (d) => <String, dynamic>{
-            'domain': d,
-            'utf8_len': utf8.encode(d).length,
-            'label': d.contains('.') ? d.split('.').first : d,
-            'tld': d.contains('.') ? d.substring(d.indexOf('.')) : '',
-          },
-          name: 'split_map',
-        )
-        .then<Map<String, dynamic>>(
-          (m) {
-            final label = m['label'] as String;
-            final feats = SocFeatures.forDomain(m['domain'] as String);
-            return {
-              ...m,
-              'entropy': feats.entropy,
-              'hex_ratio': feats.hexRatio,
-              'label_len': label.length,
-              'vowel_consonant_transitions': feats.vowelConsonantTransitions,
-              'digit_ratio': feats.digitRatio,
-            };
-          },
-          name: 'soc_features',
-        );
+    final pipeline =
+        CodecPipeline<String, String>(
+              (d) => d.trim().toLowerCase(),
+              name: 'lower_trim',
+            )
+            .then<Map<String, dynamic>>(
+              (d) => <String, dynamic>{
+                'domain': d,
+                'utf8_len': utf8.encode(d).length,
+                'label': d.contains('.') ? d.split('.').first : d,
+                'tld': d.contains('.') ? d.substring(d.indexOf('.')) : '',
+              },
+              name: 'split_map',
+            )
+            .then<Map<String, dynamic>>((m) {
+              final label = m['label'] as String;
+              final feats = SocFeatures.forDomain(m['domain'] as String);
+              return {
+                ...m,
+                'entropy': feats.entropy,
+                'hex_ratio': feats.hexRatio,
+                'label_len': label.length,
+                'vowel_consonant_transitions': feats.vowelConsonantTransitions,
+                'digit_ratio': feats.digitRatio,
+              };
+            }, name: 'soc_features');
     return [for (final d in domains) pipeline.convert(d)];
   }
 
@@ -222,11 +220,7 @@ class LabHarness {
     Map<String, dynamic>? fields,
     String level = 'info',
   }) {
-    final line = jsonEncode({
-      'type': 'event',
-      'event': event,
-      ...?fields,
-    });
+    final line = jsonEncode({'type': 'event', 'event': event, ...?fields});
     _emit(level, line);
   }
 
@@ -234,8 +228,7 @@ class LabHarness {
   static RateLimiter rateLimiter({
     int maxPerWindow = 10,
     Duration window = const Duration(hours: 1),
-  }) =>
-      RateLimiter.slidingWindow(maxPerWindow, window);
+  }) => RateLimiter.slidingWindow(maxPerWindow, window);
 
   static void _emit(String level, String line) {
     switch (level) {

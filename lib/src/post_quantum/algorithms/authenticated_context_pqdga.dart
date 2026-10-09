@@ -71,8 +71,7 @@ class AuthenticatedContextPqdga extends PQDGAAlgorithm {
   });
 
   /// Whether this config is secret-bound (confidentiality axis).
-  bool get secretBound =>
-      secretMaterial != null && secretMaterial!.isNotEmpty;
+  bool get secretBound => secretMaterial != null && secretMaterial!.isNotEmpty;
 
   /// Lab helper: ephemeral ML-DSA keys (± optional secret).
   static AuthenticatedContextLabSession labEstablish({
@@ -91,10 +90,7 @@ class AuthenticatedContextPqdga extends PQDGAAlgorithm {
     final forge = const PqForge();
     final kp = sigSeed == null
         ? forge.generateSignatureKeyPair(algorithm: algorithm)
-        : forge.generateSignatureKeyPairFromSeed(
-            sigSeed,
-            algorithm: algorithm,
-          );
+        : forge.generateSignatureKeyPairFromSeed(sigSeed, algorithm: algorithm);
     final algo = AuthenticatedContextPqdga(
       campaignId: campaignId,
       tld: tld,
@@ -134,18 +130,18 @@ class AuthenticatedContextLabSession {
 
   /// Authenticity-only (no secret material).
   AuthenticatedContextPqdga get asAuthOnlyConfig => AuthenticatedContextPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        domainSeparator: algorithm.domainSeparator,
-        kdf: algorithm.kdf,
-        kmacCustomization: algorithm.kmacCustomization,
-        signatureAlgorithm: signatureAlgorithm,
-        signatureSecretKey: signatureSecretKey,
-        signaturePublicKey: signaturePublicKey,
-        signContext: algorithm.signContext,
-        requireSignature: algorithm.requireSignature,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    domainSeparator: algorithm.domainSeparator,
+    kdf: algorithm.kdf,
+    kmacCustomization: algorithm.kmacCustomization,
+    signatureAlgorithm: signatureAlgorithm,
+    signatureSecretKey: signatureSecretKey,
+    signaturePublicKey: signaturePublicKey,
+    signContext: algorithm.signContext,
+    requireSignature: algorithm.requireSignature,
+  );
 
   /// Authenticity + confidentiality.
   AuthenticatedContextPqdga withSecret(Uint8List secret) =>

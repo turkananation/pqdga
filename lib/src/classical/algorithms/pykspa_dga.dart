@@ -13,8 +13,5 @@ class PykspaDGA extends DGAAlgorithm {
   /// When non-null, overrides date-derived 2-day bucket seed (lab pin).
   final int? seedOverride;
 
-  const PykspaDGA({
-    this.domainsPerDay = 5000,
-    this.seedOverride,
-  });
+  const PykspaDGA({this.domainsPerDay = 5000, this.seedOverride});
 }

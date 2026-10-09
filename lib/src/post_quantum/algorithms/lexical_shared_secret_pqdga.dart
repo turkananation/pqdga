@@ -122,17 +122,17 @@ class LexicalSharedSecretLabSession {
   });
 
   LexicalSharedSecretPqdga get asDecapsConfig => LexicalSharedSecretPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        lexicalMode: algorithm.lexicalMode,
-        charset: algorithm.charset,
-        wordlist: algorithm.wordlist,
-        domainSeparator: algorithm.domainSeparator,
-        kdf: algorithm.kdf,
-        kmacCustomization: algorithm.kmacCustomization,
-        kemAlgorithm: kemAlgorithm,
-        kemCiphertext: kemCiphertext,
-        kemSecretKey: kemSecretKey,
-        kemPublicKey: kemPublicKey,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    lexicalMode: algorithm.lexicalMode,
+    charset: algorithm.charset,
+    wordlist: algorithm.wordlist,
+    domainSeparator: algorithm.domainSeparator,
+    kdf: algorithm.kdf,
+    kmacCustomization: algorithm.kmacCustomization,
+    kemAlgorithm: kemAlgorithm,
+    kemCiphertext: kemCiphertext,
+    kemSecretKey: kemSecretKey,
+    kemPublicKey: kemPublicKey,
+  );
 }

@@ -30,8 +30,9 @@ class NotebookConsumer {
       'hardness_scorecard': hard.toJson(),
       'hardness_line': hard.summaryLine,
       'literature': lit?.toJson(),
-      'rekey_checklist':
-          lit != null ? LiteratureCorpus.rekeyChecklist(lit.familyId) : null,
+      'rekey_checklist': lit != null
+          ? LiteratureCorpus.rekeyChecklist(lit.familyId)
+          : null,
       'codec_pipeline_rows': LabHarness.safeJsonDomainRows(pipeline),
       'generated_at': DateTime.now().toUtc().toIso8601String(),
     };
@@ -60,8 +61,7 @@ class NotebookConsumer {
       'hardness_scorecard': hard.toJson(),
       'hardness_line': hard.summaryLine,
       'codec_pipeline_rows': LabHarness.safeJsonDomainRows(pipeline),
-      if (includeSlhCatalog ||
-          result.algorithm.toLowerCase().contains('slh'))
+      if (includeSlhCatalog || result.algorithm.toLowerCase().contains('slh'))
         'slh_dsa_size_iocs': DetectorNotebook.slhDsaSizeIocs(),
       'generated_at': DateTime.now().toUtc().toIso8601String(),
     };
@@ -70,10 +70,13 @@ class NotebookConsumer {
   /// Standalone SLH size IOC catalog consumer (multi-KB signature drill).
   static Map<String, dynamic> consumeSlhSizeCatalog() {
     final catalog = DetectorNotebook.slhDsaSizeIocs();
-    LabHarness.logEvent('slh_size_catalog', fields: {
-      'sets': (catalog['parameter_sets'] as List?)?.length ?? 0,
-      'crypto_status': catalog['crypto_status'],
-    });
+    LabHarness.logEvent(
+      'slh_size_catalog',
+      fields: {
+        'sets': (catalog['parameter_sets'] as List?)?.length ?? 0,
+        'crypto_status': catalog['crypto_status'],
+      },
+    );
     return {
       'consumer': 'NotebookConsumer.consumeSlhSizeCatalog',
       'catalog': catalog,
@@ -89,9 +92,10 @@ class NotebookConsumer {
   static Future<Map<String, dynamic>> consumeBindingAnalysis() async {
     final suite = await BindingAnalysis.runAll();
     final writeups = BindingAnalysis.writeups();
-    LabHarness.logEvent('binding_analysis_suite', fields: {
-      'experiments': (suite['experiments'] as Map?)?.keys.toList(),
-    });
+    LabHarness.logEvent(
+      'binding_analysis_suite',
+      fields: {'experiments': (suite['experiments'] as Map?)?.keys.toList()},
+    );
     return {
       'consumer': 'NotebookConsumer.consumeBindingAnalysis',
       'suite': suite,

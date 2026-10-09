@@ -47,12 +47,13 @@ import 'package:pqdga/src/common/predictability.dart';
 import 'package:pointycastle/export.dart';
 
 /// Classical family handler for registry dispatch.
-typedef DGAHandler = DGAResult Function(
-  DGAGenerator generator,
-  DateTime date,
-  int count,
-  DGAAlgorithm algorithm,
-);
+typedef DGAHandler =
+    DGAResult Function(
+      DGAGenerator generator,
+      DateTime date,
+      int count,
+      DGAAlgorithm algorithm,
+    );
 
 /// Main Generator Logic using PointyCastle
 class DGAGenerator {
@@ -68,8 +69,7 @@ class DGAGenerator {
     MatsnuDGA: (g, d, c, a) => g._generateMatsnu(d, c, a as MatsnuDGA),
     NecursDGA: (g, d, c, a) => g._generateNecurs(d, c, a as NecursDGA),
     PushdoDGA: (g, d, c, a) => g._generatePushdo(d, c, a as PushdoDGA),
-    ConfickerDGA: (g, d, c, a) =>
-        g._generateConficker(d, c, a as ConfickerDGA),
+    ConfickerDGA: (g, d, c, a) => g._generateConficker(d, c, a as ConfickerDGA),
     RovnixDGA: (g, d, c, a) => g._generateRovnix(d, c, a as RovnixDGA),
     CryptoLockerDGA: (g, d, c, a) =>
         g._generateCryptoLocker(d, c, a as CryptoLockerDGA),
@@ -77,8 +77,7 @@ class DGAGenerator {
     TinbaDGA: (g, d, c, a) => g._generateTinba(d, c, a as TinbaDGA),
     MurofetDGA: (g, d, c, a) => g._generateMurofet(d, c, a as MurofetDGA),
     SimdaDGA: (g, d, c, a) => g._generateSimda(d, c, a as SimdaDGA),
-    TimeBasedDGA: (g, d, c, a) =>
-        g._generateTimeBased(d, c, a as TimeBasedDGA),
+    TimeBasedDGA: (g, d, c, a) => g._generateTimeBased(d, c, a as TimeBasedDGA),
     DictionaryBasedDGA: (g, d, c, a) =>
         g._generateDictionaryBased(d, c, a as DictionaryBasedDGA),
     ArithmeticDGA: (g, d, c, a) =>
@@ -166,7 +165,8 @@ class DGAGenerator {
         tldSet: algo.tld,
         seedPacking: 'YYYYMMDD string → MD5 hex substrings',
         prng: 'md5',
-        socLesson: 'High hex_ratio labels; MD5(date) stream is fully precomputable.',
+        socLesson:
+            'High hex_ratio labels; MD5(date) stream is fully precomputable.',
         extra: {'md5': hexString},
       ),
     );
@@ -223,9 +223,7 @@ class DGAGenerator {
         domainsPerDay: algo.domainsPerDay,
         socLesson:
             'Date-only LCG; vowel/consonant transitions fingerprint pronounceable mode.',
-        extra: {
-          'use_pronounceable_pattern': algo.usePronounceablePattern,
-        },
+        extra: {'use_pronounceable_pattern': algo.usePronounceablePattern},
       ),
     );
   }
@@ -260,7 +258,8 @@ class DGAGenerator {
         tldSet: algo.tld,
         seedPacking: '(year<<16)|(month<<8)|day then LCG',
         prng: 'lcg_${algo.lcgMultiplier}_${algo.lcgIncrement}',
-        socLesson: 'Fixed-length LCG labels; multi-TLD rotation is a batch IOC.',
+        socLesson:
+            'Fixed-length LCG labels; multi-TLD rotation is a batch IOC.',
         extra: {
           'include_numbers': algo.includeNumbers,
           'lcg_multiplier': algo.lcgMultiplier,
@@ -373,7 +372,8 @@ class DGAGenerator {
         tldSet: algo.tld,
         seedPacking: 'CRC32(year+month+day) → LCG',
         prng: 'crc32+glibc_lcg',
-        socLesson: 'CRC32 date seed + CV pattern; variant string is catalog IOC.',
+        socLesson:
+            'CRC32 date seed + CV pattern; variant string is catalog IOC.',
         extra: {'variant': algo.variant},
       ),
     );
@@ -426,7 +426,8 @@ class DGAGenerator {
         tldSet: algo.tld,
         seedPacking: '(year+seedConstant)*(month+day)',
         prng: 'numerical_recipes_lcg_1664525',
-        socLesson: 'Ransomware-era daily sets; arithmetic date seed is trivial.',
+        socLesson:
+            'Ransomware-era daily sets; arithmetic date seed is trivial.',
         extra: {'seed_constant': algo.seedConstant},
       ),
     );
@@ -643,7 +644,8 @@ class DGAGenerator {
         prng: 'glibc_lcg',
         domainsPerDay: algo.domainsPerDay,
         needsConfigExtract: true,
-        socLesson: 'XOR constant is a YARA/config IOC; then date precompute works.',
+        socLesson:
+            'XOR constant is a YARA/config IOC; then date precompute works.',
         extra: {'xor_constant': algo.xorConstant},
       ),
     );
@@ -878,7 +880,8 @@ class DGAGenerator {
 
     final buffer = StringBuffer();
     for (int i = 0; i < length; i++) {
-      r = (_ror32(_mul32(0xB11924E1, _rol32(r, i)), shift) + 0x27100001) &
+      r =
+          (_ror32(_mul32(0xB11924E1, _rol32(r, i)), shift) + 0x27100001) &
           0xFFFFFFFF;
       buffer.writeCharCode((r % 25) + 0x61); // a-y
     }
@@ -972,8 +975,7 @@ class DGAGenerator {
     }
 
     final unix =
-        algo.unixSeconds ??
-        date.toUtc().millisecondsSinceEpoch ~/ 1000;
+        algo.unixSeconds ?? date.toUtc().millisecondsSinceEpoch ~/ 1000;
     var seed = unix >> 9;
     final domains = <String>[];
     const shuffle = [3, 9, 13, 6, 2, 4, 11, 7, 14, 1, 10, 5, 8, 12, 0];
@@ -1032,7 +1034,9 @@ class DGAGenerator {
   // -------------------------------------------------------------------------
   DGAResult _generateBanjori(DateTime date, int count, BanjoriDGA algo) {
     if (algo.seedDomain.length < 4) {
-      throw ArgumentError('BanjoriDGA.seedDomain must be at least 4 characters');
+      throw ArgumentError(
+        'BanjoriDGA.seedDomain must be at least 4 characters',
+      );
     }
 
     final domains = <String>[];
@@ -1111,12 +1115,10 @@ class DGAGenerator {
       final buffer = StringBuffer();
       for (int i = 0; i < 14; i++) {
         day =
-            ((day >> 15) ^
-                _mul32(16, (day & 0x1FFF) ^ _mul32(4, seed ^ day))) &
+            ((day >> 15) ^ _mul32(16, (day & 0x1FFF) ^ _mul32(4, seed ^ day))) &
             0xFFFFFFFF;
         year =
-            ((((year & 0xFFFFFFF0) << 17) &
-                    0xFFFFFFFF) ^
+            ((((year & 0xFFFFFFF0) << 17) & 0xFFFFFFFF) ^
                 (((year ^ _mul32(7, year)) >> 11) & 0xFFFFFFFF)) &
             0xFFFFFFFF;
         month =
@@ -1124,8 +1126,7 @@ class DGAGenerator {
                 (((month ^ _mul32(4, month)) >> 8) & 0xFFFFFFFF)) &
             0xFFFFFFFF;
         seed =
-            ((seed >> 6) ^
-                ((((day + _mul32(8, seed)) << 8) & 0x3FFFF00))) &
+            ((seed >> 6) ^ ((((day + _mul32(8, seed)) << 8) & 0x3FFFF00))) &
             0xFFFFFFFF;
         final x = ((day ^ month ^ year) % 25) + 97;
         buffer.writeCharCode(x);
@@ -1307,11 +1308,7 @@ class DGAGenerator {
   // -------------------------------------------------------------------------
   // R8: Oracle-seeded
   // -------------------------------------------------------------------------
-  DGAResult _generateOracleSeed(
-    DateTime date,
-    int count,
-    OracleSeedDGA algo,
-  ) {
+  DGAResult _generateOracleSeed(DateTime date, int count, OracleSeedDGA algo) {
     final material = algo.oracleMaterial;
     if (material == null || material.isEmpty) {
       throw ArgumentError(
@@ -1538,7 +1535,6 @@ class DGAGenerator {
     );
   }
 
-
   // -------------------------------------------------------------------------
   // P1: RAMNIT — literature Park–Miller (baderj / bin.re)
   // -------------------------------------------------------------------------
@@ -1557,8 +1553,7 @@ class DGAGenerator {
     final limit = count > algo.domainsPerDay ? algo.domainsPerDay : count;
     for (var idx = 0; idx < limit; idx++) {
       final firstSeed = randomInt.value;
-      final domainLen =
-          randomInt.randIntModulus(1 + (maxL - minL)) + minL;
+      final domainLen = randomInt.randIntModulus(1 + (maxL - minL)) + minL;
       final secondSeed = randomInt.value;
       final buf = StringBuffer();
       for (var i = 0; i < domainLen; i++) {
@@ -1715,8 +1710,7 @@ class DGAGenerator {
         }
       }
     }
-    final cx =
-        ((asciiCodes[2] * oldHostnameLength) ^ asciiCodes[0]) & 0xFF;
+    final cx = ((asciiCodes[2] * oldHostnameLength) ^ asciiCodes[0]) & 0xFF;
     var hostnameLength = cx ~/ 16;
     if (hostnameLength < 10) {
       hostnameLength = oldHostnameLength;
@@ -1996,13 +1990,15 @@ class DGAGenerator {
   // -------------------------------------------------------------------------
   DGAResult _generateTorpig(DateTime date, int count, TorpigDGA algo) {
     final window = algo.windowDays < 1 ? 1 : algo.windowDays;
-    final dayOfYear = int.parse(
+    final dayOfYear =
+        int.parse(
           '${date.month.toString().padLeft(2, '0')}'
           '${date.day.toString().padLeft(2, '0')}',
         ) +
         date.year * 366;
     final windowIndex = dayOfYear ~/ window;
-    var state = (windowIndex * 0x9E3779B9 ^ (algo.seed & 0xFFFFFFFF)) & 0xFFFFFFFF;
+    var state =
+        (windowIndex * 0x9E3779B9 ^ (algo.seed & 0xFFFFFFFF)) & 0xFFFFFFFF;
     final domains = <String>[];
     final limit = count > algo.domainsPerDay ? algo.domainsPerDay : count;
     for (var i = 0; i < limit; i++) {
@@ -2051,7 +2047,8 @@ class DGAGenerator {
   DGAResult _generateCoreBot(DateTime date, int count, CoreBotDGA algo) {
     // r = (r + year + ((nr_b << 16) + (month << 8) | day)) & 0xFFFFFFFF
     // r = (r + year + ((nr_b << 16) + ((month << 8) | day))) & 0xFFFFFFFF
-    var r = (algo.seed +
+    var r =
+        (algo.seed +
             date.year +
             ((algo.nrB << 16) + ((date.month << 8) | date.day))) &
         0xFFFFFFFF;
@@ -2061,7 +2058,9 @@ class DGAGenerator {
     final lcg = CorebotLcg(r);
     final domains = <String>[];
     final limit = count > algo.domainsPerDay ? algo.domainsPerDay : count;
-    final suffix = algo.suffix.startsWith('.') ? algo.suffix : '.${algo.suffix}';
+    final suffix = algo.suffix.startsWith('.')
+        ? algo.suffix
+        : '.${algo.suffix}';
     for (var i = 0; i < limit; i++) {
       const lenL = 0xC;
       const lenU = 0x18;
@@ -2260,10 +2259,8 @@ class DGAGenerator {
           delta++;
         } else if (c == n) {
           var q = delta;
-          for (var k = base;; k += base) {
-            final t = k <= bias
-                ? tmin
-                : (k >= bias + tmax ? tmax : k - bias);
+          for (var k = base; ; k += base) {
+            final t = k <= bias ? tmin : (k >= bias + tmax ? tmax : k - bias);
             if (q < t) break;
             final code = t + ((q - t) % (base - t));
             output.writeCharCode(code < 26 ? 97 + code : 22 + code);
@@ -2329,8 +2326,7 @@ class _MT19937 {
     _mt[0] = seed & 0xFFFFFFFF;
     for (int i = 1; i < 624; i++) {
       final prev = _mt[i - 1];
-      _mt[i] =
-          (1812433253 * (prev ^ (prev >> 30)) + i) & 0xFFFFFFFF;
+      _mt[i] = (1812433253 * (prev ^ (prev >> 30)) + i) & 0xFFFFFFFF;
     }
   }
 

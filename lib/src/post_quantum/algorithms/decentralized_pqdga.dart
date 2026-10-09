@@ -110,16 +110,16 @@ class DecentralizedLabSession {
 
   /// Abstract (non-DNS) id mode for channel-agility drills.
   DecentralizedPqdga get asAbstractConfig => DecentralizedPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        namespaceKey: namespaceKey,
-        domainSeparator: algorithm.domainSeparator,
-        xof: algorithm.xof,
-        encoding: algorithm.encoding,
-        dnsMode: false,
-        idByteLength: algorithm.idByteLength,
-        namespaceKind: algorithm.namespaceKind,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    namespaceKey: namespaceKey,
+    domainSeparator: algorithm.domainSeparator,
+    xof: algorithm.xof,
+    encoding: algorithm.encoding,
+    dnsMode: false,
+    idByteLength: algorithm.idByteLength,
+    namespaceKind: algorithm.namespaceKind,
+  );
 }
 
 /// Minimal RFC 4648 base32 (lowercase, no padding) for DNS-safe labels.

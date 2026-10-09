@@ -7,15 +7,10 @@ import 'package:swissarmyknife/swissarmyknife.dart';
 /// Crypto stays in pqcrypto; this module is research plumbing only.
 class DnsLabelCodec {
   /// Default LDH-ish lowercase alphanumeric charset (no hyphen leading/trailing rules).
-  static const String defaultCharset =
-      'abcdefghijklmnopqrstuvwxyz0123456789';
+  static const String defaultCharset = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
   /// Map [bytes] into [charset] for exactly [length] characters (rejection-free mod).
-  static String mapBytesToCharset(
-    Uint8List bytes,
-    String charset,
-    int length,
-  ) {
+  static String mapBytesToCharset(Uint8List bytes, String charset, int length) {
     if (charset.isEmpty) {
       throw ArgumentError('charset must be non-empty');
     }
@@ -59,7 +54,9 @@ class DnsLabelCodec {
   /// FQDN length ≤ 253 (excluding trailing root dot).
   static Result<String, List<String>> validateFqdn(String fqdn) {
     final errors = <String>[];
-    final cleaned = fqdn.endsWith('.') ? fqdn.substring(0, fqdn.length - 1) : fqdn;
+    final cleaned = fqdn.endsWith('.')
+        ? fqdn.substring(0, fqdn.length - 1)
+        : fqdn;
     if (cleaned.length > 253) {
       errors.add('fqdn length ${cleaned.length} > 253');
     }

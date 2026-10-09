@@ -128,7 +128,8 @@ class HierarchicalPqdga extends PQDGAAlgorithm {
     String kmacCustomization = 'pqdga/v1/hierarchy',
     String hierarchyId = 'lab-tree',
   }) {
-    final fixedRoot = rootSecret ??
+    final fixedRoot =
+        rootSecret ??
         Uint8List.fromList(List<int>.generate(32, (i) => 0xD0 + (i & 0x0f)));
     final leaf = deriveLeaf(
       root: fixedRoot,
@@ -174,16 +175,16 @@ class HierarchicalLabSession {
 
   /// Leaf-only config (parent/root deleted — compartment drill).
   HierarchicalPqdga get asLeafOnlyConfig => HierarchicalPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        domainSeparator: algorithm.domainSeparator,
-        kdf: algorithm.kdf,
-        kmacCustomization: algorithm.kmacCustomization,
-        hierarchyPath: hierarchyPath,
-        leafKey: leafKey,
-        hierarchyId: algorithm.hierarchyId,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    domainSeparator: algorithm.domainSeparator,
+    kdf: algorithm.kdf,
+    kmacCustomization: algorithm.kmacCustomization,
+    hierarchyPath: hierarchyPath,
+    leafKey: leafKey,
+    hierarchyId: algorithm.hierarchyId,
+  );
 
   /// Sibling path under same root (different compartment).
   HierarchicalLabSession deriveSibling(List<String> path) {

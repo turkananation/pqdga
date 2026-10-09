@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+// pqforge deliberately does NOT re-export pqcrypto's lattice primitives
+// (see the note in pqforge's barrel doc), so import pqcrypto directly.
+import 'package:pqcrypto/pqcrypto.dart';
 import 'package:pqforge/pqforge.dart';
 import 'package:pqdga/src/common/predictability.dart';
 import 'package:pqdga/src/post_quantum/algorithms/decentralized_pqdga.dart';
@@ -35,12 +38,13 @@ import 'package:pqdga/src/post_quantum/pqdga_result.dart';
 /// Handler signature for PQ family generators (registry dispatch).
 ///
 /// May be sync or async (e.g. hybrid Ed25519 signing).
-typedef PQDGAHandler = FutureOr<PQDGAResult> Function(
-  DateTime date,
-  int count,
-  PQDGAAlgorithm algorithm,
-  PQDGAConfig config,
-);
+typedef PQDGAHandler =
+    FutureOr<PQDGAResult> Function(
+      DateTime date,
+      int count,
+      PQDGAAlgorithm algorithm,
+      PQDGAConfig config,
+    );
 
 /// Post-quantum DGA generator — registry dispatch + shared SHAKE pipeline.
 ///
@@ -51,7 +55,12 @@ class PQDGAGenerator {
   /// Type → handler registry (extend when adding families; no central if-ladder).
   static final Map<Type, PQDGAHandler> registry = {
     QuantumResistantPqdga: (date, count, algo, cfg) =>
-        _generateQuantumResistant(date, count, algo as QuantumResistantPqdga, cfg),
+        _generateQuantumResistant(
+          date,
+          count,
+          algo as QuantumResistantPqdga,
+          cfg,
+        ),
     SharedSecretPqdga: (date, count, algo, cfg) =>
         _generateSharedSecret(date, count, algo as SharedSecretPqdga, cfg),
     SignatureAuthenticatedPqdga: (date, count, algo, cfg) =>
@@ -201,8 +210,11 @@ class PQDGAGenerator {
       final span = maxLen - minLen + 1;
       final length = minLen + (stream[0] % span);
       final labelBytes = Uint8List.sublistView(stream, 1, 1 + length);
-      final label =
-          DnsLabelCodec.mapBytesToCharset(labelBytes, algo.charset, length);
+      final label = DnsLabelCodec.mapBytesToCharset(
+        labelBytes,
+        algo.charset,
+        length,
+      );
 
       final labelCheck = DnsLabelCodec.validateLabel(label);
       if (labelCheck.isFailure) {
@@ -211,8 +223,9 @@ class PQDGAGenerator {
         );
       }
 
-      final tld =
-          DnsLabelCodec.normalizeTld(algo.tld[stream[1 + length] % algo.tld.length]);
+      final tld = DnsLabelCodec.normalizeTld(
+        algo.tld[stream[1 + length] % algo.tld.length],
+      );
       final fqdn = '$label$tld';
       final fqdnCheck = DnsLabelCodec.validateFqdn(fqdn);
       if (fqdnCheck.isFailure) {
@@ -235,7 +248,8 @@ class PQDGAGenerator {
       domains: domains,
       generationDate: date,
       algorithm: 'QuantumResistant',
-      seed: 'epoch=$epoch,campaign=${algo.campaignId},public=${algo.seedPublic}',
+      seed:
+          'epoch=$epoch,campaign=${algo.campaignId},public=${algo.seedPublic}',
       predictable: predictable,
       secretBound: secretBound,
       epoch: epoch,
@@ -252,7 +266,8 @@ class PQDGAGenerator {
         'predictability': predictability.wireName,
         'campaign_id': algo.campaignId,
         'domain_separator': algo.domainSeparator,
-        'soc_lesson': 'PQ hash ≠ secret — public-seed SHAKE remains precomputable',
+        'soc_lesson':
+            'PQ hash ≠ secret — public-seed SHAKE remains precomputable',
         'playbook_flags': {
           'sinkhole_precompute': predictable,
           'needs_secret_extraction': secretBound,
@@ -316,8 +331,11 @@ class PQDGAGenerator {
         final span = maxLen - minLen + 1;
         final length = minLen + (stream[0] % span);
         final labelBytes = Uint8List.sublistView(stream, 1, 1 + length);
-        final label =
-            DnsLabelCodec.mapBytesToCharset(labelBytes, algo.charset, length);
+        final label = DnsLabelCodec.mapBytesToCharset(
+          labelBytes,
+          algo.charset,
+          length,
+        );
 
         final labelCheck = DnsLabelCodec.validateLabel(label);
         if (labelCheck.isFailure) {
@@ -368,8 +386,7 @@ class PQDGAGenerator {
         'length_max': maxLen,
         'length_samples': lengths,
         'tld_set': algo.tld.map(DnsLabelCodec.normalizeTld).toList(),
-        'seed_packing':
-            'domain_sep || ss || epoch || campaign || counter_be32',
+        'seed_packing': 'domain_sep || ss || epoch || campaign || counter_be32',
         'seed_public': false,
         'predictability': PredictabilityClass.secretSeeded.wireName,
         'campaign_id': algo.campaignId,
@@ -462,8 +479,11 @@ class PQDGAGenerator {
         final span = maxLen - minLen + 1;
         final length = minLen + (stream[0] % span);
         final labelBytes = Uint8List.sublistView(stream, 1, 1 + length);
-        final label =
-            DnsLabelCodec.mapBytesToCharset(labelBytes, algo.charset, length);
+        final label = DnsLabelCodec.mapBytesToCharset(
+          labelBytes,
+          algo.charset,
+          length,
+        );
 
         final labelCheck = DnsLabelCodec.validateLabel(label);
         if (labelCheck.isFailure) {
@@ -558,8 +578,7 @@ class PQDGAGenerator {
         'tld_set': algo.tld.map(DnsLabelCodec.normalizeTld).toList(),
         'seed_packing':
             'domain_sep || [secret] || epoch || campaign || counter_be32',
-        'sig_message_packing':
-            'sig_domain_sep || domain || epoch || campaign',
+        'sig_message_packing': 'sig_domain_sep || domain || epoch || campaign',
         'seed_public': algo.seedPublic,
         'predictability': predictability.wireName,
         'campaign_id': algo.campaignId,
@@ -651,8 +670,11 @@ class PQDGAGenerator {
         final span = maxLen - minLen + 1;
         final length = minLen + (stream[0] % span);
         final labelBytes = Uint8List.sublistView(stream, 1, 1 + length);
-        final label =
-            DnsLabelCodec.mapBytesToCharset(labelBytes, algo.charset, length);
+        final label = DnsLabelCodec.mapBytesToCharset(
+          labelBytes,
+          algo.charset,
+          length,
+        );
         final labelCheck = DnsLabelCodec.validateLabel(label);
         if (labelCheck.isFailure) {
           throw StateError(
@@ -713,8 +735,7 @@ class PQDGAGenerator {
       secretBound: false,
       epoch: epoch,
       xof: xofName,
-      sigAlgorithm:
-          algo.requireSignature ? algo.signatureAlgorithm.name : null,
+      sigAlgorithm: algo.requireSignature ? algo.signatureAlgorithm.name : null,
       signatureLength: algo.requireSignature
           ? algo.signatureAlgorithm.signatureBytes
           : null,
@@ -806,8 +827,11 @@ class PQDGAGenerator {
         final span = maxLen - minLen + 1;
         final length = minLen + (stream[0] % span);
         final labelBytes = Uint8List.sublistView(stream, 1, 1 + length);
-        final label =
-            DnsLabelCodec.mapBytesToCharset(labelBytes, algo.charset, length);
+        final label = DnsLabelCodec.mapBytesToCharset(
+          labelBytes,
+          algo.charset,
+          length,
+        );
         final labelCheck = DnsLabelCodec.validateLabel(label);
         if (labelCheck.isFailure) {
           throw StateError(
@@ -934,7 +958,9 @@ class PQDGAGenerator {
       );
     }
     if (algo.dnsMode && algo.tld.isEmpty) {
-      throw ArgumentError('DecentralizedPqdga.tld must be non-empty in dnsMode');
+      throw ArgumentError(
+        'DecentralizedPqdga.tld must be non-empty in dnsMode',
+      );
     }
     final xofName = algo.xof.toUpperCase();
     if (xofName != 'SHAKE256' && xofName != 'SHAKE128') {
@@ -1248,9 +1274,7 @@ class PQDGAGenerator {
     }
     if (!algo.seedPublic &&
         (algo.secretMaterial == null || algo.secretMaterial!.isEmpty)) {
-      throw ArgumentError(
-        'secretMaterial required when seedPublic is false',
-      );
+      throw ArgumentError('secretMaterial required when seedPublic is false');
     }
     final xofName = algo.xof.toUpperCase();
     if (xofName != 'SHAKE256' && xofName != 'SHAKE128') {
@@ -1416,8 +1440,8 @@ class PQDGAGenerator {
       rethrow;
     }
 
-    final ctLen = algo.primaryKemCiphertext?.length ??
-        algo.kemAlgorithm.ciphertextBytes;
+    final ctLen =
+        algo.primaryKemCiphertext?.length ?? algo.kemAlgorithm.ciphertextBytes;
 
     return PQDGAResult(
       domains: domains,
@@ -1549,7 +1573,8 @@ class PQDGAGenerator {
         'length_max': maxLen,
         'length_samples': lengths,
         'tld_set': algo.tld.map(DnsLabelCodec.normalizeTld).toList(),
-        'seed_packing': 'KMAC256(key=ss, data=sep||epoch||campaign||counter, S)',
+        'seed_packing':
+            'KMAC256(key=ss, data=sep||epoch||campaign||counter, S)',
         'binding_mode': 'kmac-shared-secret',
         'kmac_customization': algo.kmacCustomization,
         'domain_separator': algo.domainSeparator,
@@ -1643,7 +1668,8 @@ class PQDGAGenerator {
       rethrow;
     }
 
-    final ctLen = algo.kemCiphertext?.length ?? algo.kemAlgorithm.ciphertextBytes;
+    final ctLen =
+        algo.kemCiphertext?.length ?? algo.kemAlgorithm.ciphertextBytes;
     return PQDGAResult(
       domains: domains,
       generationDate: date,
@@ -1763,7 +1789,8 @@ class PQDGAGenerator {
         'length_max': maxLen,
         'length_samples': lengths,
         'tld_set': algo.tld.map(DnsLabelCodec.normalizeTld).toList(),
-        'seed_packing': 'expand(epoch_key_i, sep||ratchet-i||campaign||counter)',
+        'seed_packing':
+            'expand(epoch_key_i, sep||ratchet-i||campaign||counter)',
         'binding_mode': 'ratcheting',
         'ratchet_id': algo.ratchetId,
         'epoch_index': algo.epochIndex,
@@ -1859,7 +1886,8 @@ class PQDGAGenerator {
         'length_max': maxLen,
         'length_samples': lengths,
         'tld_set': algo.tld.map(DnsLabelCodec.normalizeTld).toList(),
-        'seed_packing': 'expand(leaf_key(path), sep||epoch||campaign||counter||path)',
+        'seed_packing':
+            'expand(leaf_key(path), sep||epoch||campaign||counter||path)',
         'binding_mode': 'hierarchical',
         'hierarchy_id': algo.hierarchyId,
         'hierarchy_path': List<String>.from(algo.hierarchyPath),
@@ -1907,7 +1935,9 @@ class PQDGAGenerator {
     final lengths = <int>[];
     final kdf = algo.kdf.toUpperCase();
     final partyCount = algo.bindingKey != null && algo.bindingKey!.isNotEmpty
-        ? (algo.partySecrets.isEmpty ? algo.minParties : algo.partySecrets.length)
+        ? (algo.partySecrets.isEmpty
+              ? algo.minParties
+              : algo.partySecrets.length)
         : algo.partySecrets.length;
 
     try {
@@ -2087,7 +2117,9 @@ class PQDGAGenerator {
     PQDGAConfig config,
   ) {
     if (algo.charset.isEmpty) {
-      throw ArgumentError('AuthenticatedContextPqdga.charset must be non-empty');
+      throw ArgumentError(
+        'AuthenticatedContextPqdga.charset must be non-empty',
+      );
     }
     if (algo.tld.isEmpty) {
       throw ArgumentError('AuthenticatedContextPqdga.tld must be non-empty');
@@ -2509,7 +2541,8 @@ class PQDGAGenerator {
             message,
             params,
             context: algo.signContext ?? Uint8List(0),
-            allowSlowSigning: algo.allowSlowSigning || !algo.parameterSet.isFast,
+            allowSlowSigning:
+                algo.allowSlowSigning || !algo.parameterSet.isFast,
             verifyAfterSign: true,
           );
           if (sig.length != algo.parameterSet.signatureBytes) {
@@ -2614,9 +2647,7 @@ class PQDGAGenerator {
     PQDGAConfig config,
   ) async {
     if (algo.charset.isEmpty) {
-      throw ArgumentError(
-        'HybridAuthenticatedPqdga.charset must be non-empty',
-      );
+      throw ArgumentError('HybridAuthenticatedPqdga.charset must be non-empty');
     }
     if (algo.tld.isEmpty) {
       throw ArgumentError('HybridAuthenticatedPqdga.tld must be non-empty');
@@ -2806,8 +2837,7 @@ class PQDGAGenerator {
         'classical_signature_length': classicalSigLen,
         'classical_pubkey_fingerprint': classicalFp,
         'classical_signatures_b64': [
-          for (final s in classicalSignatures)
-            base64Encode(s),
+          for (final s in classicalSignatures) base64Encode(s),
         ],
         'binding_mode': 'hybrid-authenticated',
         'primitive': 'pqforge.PqForgeHybridSigner',
@@ -2917,15 +2947,12 @@ class PQDGAGenerator {
   }) {
     final need = 1 + maxLen + 1;
     if (stream.length < need) {
-      throw StateError(
-        'expander returned ${stream.length} bytes, need $need',
-      );
+      throw StateError('expander returned ${stream.length} bytes, need $need');
     }
     final span = maxLen - minLen + 1;
     final length = minLen + (stream[0] % span);
     final labelBytes = Uint8List.sublistView(stream, 1, 1 + length);
-    final label =
-        DnsLabelCodec.mapBytesToCharset(labelBytes, charset, length);
+    final label = DnsLabelCodec.mapBytesToCharset(labelBytes, charset, length);
     final labelCheck = DnsLabelCodec.validateLabel(label);
     if (labelCheck.isFailure) {
       throw StateError(
@@ -3071,11 +3098,7 @@ class PQDGAGenerator {
     final sk = kemSecretKey;
     final ct = kemCiphertext;
     if (sk != null && sk.isNotEmpty && ct != null && ct.isNotEmpty) {
-      final ss = forge.decapsulate(
-        sk,
-        ct,
-        algorithm: kemAlgorithm,
-      );
+      final ss = forge.decapsulate(sk, ct, algorithm: kemAlgorithm);
       if (ss.isEmpty) {
         throw StateError('ML-KEM decapsulate returned empty shared secret');
       }
@@ -3134,12 +3157,7 @@ class PQDGAGenerator {
 
   static List<int> _be32(int value) {
     final v = value & 0xFFFFFFFF;
-    return [
-      (v >> 24) & 0xFF,
-      (v >> 16) & 0xFF,
-      (v >> 8) & 0xFF,
-      v & 0xFF,
-    ];
+    return [(v >> 24) & 0xFF, (v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF];
   }
 }
 

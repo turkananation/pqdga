@@ -141,19 +141,19 @@ class HybridKmacLabSession {
   });
 
   HybridKmacPqdga get asCombinerConfig => HybridKmacPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        domainSeparator: algorithm.domainSeparator,
-        kmacCustomization: algorithm.kmacCustomization,
-        kdf: algorithm.kdf,
-        classicalSharedSecret: classicalSharedSecret,
-        postQuantumSharedSecret: postQuantumSharedSecret,
-        kemAlgorithm: kemAlgorithm,
-        kemCiphertext: kemCiphertext,
-        classicalAlgorithm: algorithm.classicalAlgorithm,
-        combinerInfo: algorithm.combinerInfo,
-        combinerSalt: algorithm.combinerSalt,
-        combinerProfile: algorithm.combinerProfile,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    domainSeparator: algorithm.domainSeparator,
+    kmacCustomization: algorithm.kmacCustomization,
+    kdf: algorithm.kdf,
+    classicalSharedSecret: classicalSharedSecret,
+    postQuantumSharedSecret: postQuantumSharedSecret,
+    kemAlgorithm: kemAlgorithm,
+    kemCiphertext: kemCiphertext,
+    classicalAlgorithm: algorithm.classicalAlgorithm,
+    combinerInfo: algorithm.combinerInfo,
+    combinerSalt: algorithm.combinerSalt,
+    combinerProfile: algorithm.combinerProfile,
+  );
 }

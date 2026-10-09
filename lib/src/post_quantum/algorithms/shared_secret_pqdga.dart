@@ -1,6 +1,12 @@
+// Prefixed deliberately: pqcrypto also exports a symbol named secureZero,
+// and its implementation is a plain loop without the DSE guard. Under
+// 'pub downgrade' both become visible through pqforge and the plain
+// import becomes AMBIGUOUS_IMPORT. This must be the hardened one.
+import 'package:zeroize/zeroize.dart' as zeroize;
 import 'dart:typed_data';
 
 import 'package:pqforge/pqforge.dart';
+import 'package:pqdga/src/common/lab_key_sink.dart';
 import 'package:pqdga/src/post_quantum/crypto/dns_label_codec.dart';
 import 'package:pqdga/src/post_quantum/pqdga_core.dart';
 
@@ -77,14 +83,30 @@ class SharedSecretPqdga extends PQDGAAlgorithm {
     String charset = DnsLabelCodec.defaultCharset,
     String domainSeparator = 'pqdga/v1/shared-secret',
     String xof = 'SHAKE256',
+    LabKeySink? keySink,
   }) {
     final forge = const PqForge();
     final kp = forge.generateKemKeyPair(algorithm: algorithm, seed: kemSeed);
+    if (keySink != null) {
+      keySink.record((
+        name: 'kem-secret',
+        algorithm: algorithm.name,
+        secret: true,
+        bytes: kp.secretKey,
+      ));
+      keySink.record((
+        name: 'kem-public',
+        algorithm: algorithm.name,
+        secret: false,
+        bytes: kp.publicKey,
+      ));
+    }
     final enc = forge.encapsulate(
       kp.publicKey,
       algorithm: algorithm,
       nonce: encapsNonce,
     );
+    keySink?.finish(2);
     return SharedSecretLabSession(
       algorithm: SharedSecretPqdga(
         campaignId: campaignId,
@@ -128,6 +150,26 @@ class SharedSecretLabSession {
   /// Parameter set.
   final PqKemAlgorithm kemAlgorithm;
 
+  /// Wipes [kemSecretKey] and [sharedSecret].
+  ///
+  /// Both fields are live key material for as long as this session exists, and
+  /// the class documentation already warns not to log them. There was previously
+  /// no way to clear them at all.
+  ///
+  /// Uses `package:zeroize`'s `secureZero`, which is
+  /// `@pragma('vm:never-inline')` and anchors the writes with opaque reads so
+  /// they survive Dead Store Elimination in AOT.
+  ///
+  /// Safe to call more than once. [kemPublicKey] and [kemCiphertext] are not
+  /// wiped: both are public artifacts.
+  ///
+  /// This is best-effort erasure, not a memory-erasure guarantee. Pure Dart
+  /// cannot stop the GC from copying a buffer, and has no `mlock` equivalent.
+  void dispose() {
+    zeroize.secureZero(kemSecretKey);
+    zeroize.secureZero(sharedSecret);
+  }
+
   const SharedSecretLabSession({
     required this.algorithm,
     required this.kemSecretKey,
@@ -139,14 +181,14 @@ class SharedSecretLabSession {
 
   /// Algorithm view that recovers ss via decaps only (no embedded ss field).
   SharedSecretPqdga get asDecapsConfig => SharedSecretPqdga(
-        campaignId: algorithm.campaignId,
-        tld: algorithm.tld,
-        charset: algorithm.charset,
-        domainSeparator: algorithm.domainSeparator,
-        xof: algorithm.xof,
-        kemAlgorithm: kemAlgorithm,
-        kemCiphertext: kemCiphertext,
-        kemSecretKey: kemSecretKey,
-        kemPublicKey: kemPublicKey,
-      );
+    campaignId: algorithm.campaignId,
+    tld: algorithm.tld,
+    charset: algorithm.charset,
+    domainSeparator: algorithm.domainSeparator,
+    xof: algorithm.xof,
+    kemAlgorithm: kemAlgorithm,
+    kemCiphertext: kemCiphertext,
+    kemSecretKey: kemSecretKey,
+    kemPublicKey: kemPublicKey,
+  );
 }

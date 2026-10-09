@@ -97,10 +97,7 @@ class SignatureAuthenticatedPqdga extends PQDGAAlgorithm {
     final forge = const PqForge();
     final kp = sigSeed == null
         ? forge.generateSignatureKeyPair(algorithm: algorithm)
-        : forge.generateSignatureKeyPairFromSeed(
-            sigSeed,
-            algorithm: algorithm,
-          );
+        : forge.generateSignatureKeyPairFromSeed(sigSeed, algorithm: algorithm);
     final algo = SignatureAuthenticatedPqdga(
       campaignId: campaignId,
       tld: tld,

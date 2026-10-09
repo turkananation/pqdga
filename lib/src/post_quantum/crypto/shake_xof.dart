@@ -1,6 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:pqforge/pqforge.dart';
+// pqforge exposes its own algorithm vocabulary (PqKemAlgorithm, PqSlhDsaAlgorithm,
+// PqKemPrimitives, PqSignaturePrimitives) but does not re-export pqcrypto's
+// implementation types. Shake128/Shake256 are pqcrypto's, and are exported
+// from its barrel.
+import 'package:pqcrypto/pqcrypto.dart' show Shake128, Shake256;
 
 // SHAKE is implemented in pqcrypto but not re-exported from the public barrel
 // in 0.3.1 — direct import is the documented R3 path (see doc/04).

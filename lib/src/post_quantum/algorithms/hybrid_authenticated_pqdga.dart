@@ -62,9 +62,9 @@ class HybridAuthenticatedPqdga extends PQDGAAlgorithm {
     required String epoch,
     required String campaignId,
   }) {
-    return Uint8List.fromList(utf8.encode(
-      '$signatureDomainSeparator|$domain|$epoch|$campaignId',
-    ));
+    return Uint8List.fromList(
+      utf8.encode('$signatureDomainSeparator|$domain|$epoch|$campaignId'),
+    );
   }
 
   static String pubkeyFingerprintOf(Uint8List pk) {

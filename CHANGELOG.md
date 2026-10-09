@@ -1,3 +1,124 @@
+## 0.2.0
+
+### Fixed
+
+**The package did not compile.** Commit 3d9ba80 ("Use eported libraries and drop
+external libraries", 2026-08-11) replaced
+`import 'package:pqcrypto/pqcrypto.dart'` with `import 'package:pqforge/pqforge.dart'`
+across the SLH-DSA checkpoint path and `shake_xof.dart`.
+
+That commit was right about one thing and wrong about another:
+
+- **Right:** `pqforge` does export its own vocabulary — `PqKemAlgorithm`,
+  `PqSignatureAlgorithm`, `PqSlhDsaAlgorithm`, `PqKemPrimitives`,
+  `PqSignaturePrimitives`. Importing `pqforge` instead of reaching into
+  `pqcrypto/src/` is the correct layering for that.
+- **Wrong:** `pqforge` does **not** re-export `pqcrypto`'s implementation types.
+  Its barrel says so explicitly: "Lattice primitives and PointyCastle types are
+  **not** re-exported from this library. Import `package:pqcrypto/pqcrypto.dart`
+  ... when you need those APIs directly."
+
+So `SlhDsa`, `SlhDsaParams`, `Shake128` and `Shake256` were undefined, and
+`dart analyze` reported 38 issues including 20+ hard errors. Verified against
+the live package: importing only `package:pqforge/pqforge.dart` leaves all five
+symbols undefined, while `PqKemAlgorithm`, `PqSlhDsaAlgorithm`,
+`PqKemPrimitives` and `PqSignaturePrimitives` do resolve.
+
+Restores `import 'package:pqcrypto/pqcrypto.dart'` in the four affected files
+and declares `pqcrypto: ^0.4.2` as a direct dependency, since `pqdga` calls the
+FIPS 205 implementation directly and that call is real. `pqforge` stays
+imported wherever its own vocabulary is the right layer.
+
+`dart analyze` now reports **no issues**, and the full suite runs: 91 tests pass.
+
+### Fixed
+
+- **`secureZero` was ambiguous.** `pqcrypto` exports a symbol of the same name
+  from its own `src/common/zeroize.dart`, and older `pqforge` versions re-export
+  it. Under `pub downgrade` both became visible through `pqforge`, so every
+  `secureZero` call site in this package became `AMBIGUOUS_IMPORT` — 5 analyzer
+  errors, and 20 lost pub points on the lower-bound check.
+
+  The `package:zeroize` import is now prefixed, with a comment explaining why it
+  must stay that way: `pqcrypto`'s implementation is a plain loop with no
+  `@pragma('vm:never-inline')` and no opaque read anchor, so it is the weaker of
+  the two and must never be the one that wins a name collision.
+
+  This is the same collision as UQ-2 in `pqkeystore`'s upstream register: two
+  packages export `secureZero`, and only one of them is DSE-safe.
+
+### Added
+
+- `SharedSecretLabSession.dispose()` — wipes `kemSecretKey` and `sharedSecret`.
+- `IdentityBasedLabSession.dispose()` — wipes `signatureSecretKey`.
+
+Both classes hold live private key material in public fields and documented it
+as "do not log", but neither offered any way to clear it. `kemPublicKey`,
+`kemCiphertext` and `identityPublicKey` are deliberately **not** wiped: they are
+public artifacts.
+
+### Changed
+
+- Replaced the two hand-rolled wipes
+  (`sessionKey.fillRange(0, sessionKey.length, 0)` and the equivalent in
+  `MultiRecipientPqdga`) with `secureZero` from `package:zeroize`.
+  `fillRange(0, n, 0)` is exactly the loop that can be optimised away: it carries
+  no `@pragma('vm:never-inline')` and no opaque read anchor, so Dead Store
+  Elimination can drop the writes in an AOT build. `secureZero` is
+  `vm:never-inline` and anchors the writes, so it survives.
+- Added `package:zeroize` as a dependency (pure Dart, one transitive dependency).
+
+Best-effort erasure, not a memory-erasure guarantee: pure Dart cannot stop the GC
+from copying a buffer and has no `mlock` equivalent.
+
+### Added
+
+- **`LabKeySink`** — an optional sink that receives generated key material as a
+  lab session is established. `SharedSecretPqdga.labEstablish` and
+  `IdentityBasedPqdga.labEstablish` take a `keySink` argument; every key they
+  generate is handed over with its name, algorithm, and whether it is secret.
+
+  ```dart
+  final session = SharedSecretPqdga.labEstablish(
+    keySink: CallbackLabKeySink(
+      (key) => keystore.put(metadataFor(key), key.bytes, unlock),
+      (count) => print('stored $count keys'),
+    ),
+  );
+  ```
+
+  Two implementations: `InMemoryLabKeySink` for a caller that wants to inspect
+  the keys, and `CallbackLabKeySink` as the integration seam.
+
+  Passing no sink changes nothing and writes nothing anywhere.
+
+- **No filesystem sink, deliberately.** pqdga does not write key bytes to disk
+  and offers no API that does. A plaintext key file is a worse custody story
+  than not persisting at all, because it looks durable while being unprotected.
+  **Custody belongs to `pqkeystore`**: wire `CallbackLabKeySink` to
+  `PqKeystore.put` and the key is sealed by the selected provider before it
+  touches storage. The sink is handed the session's own buffers, so it must copy
+  if it needs to keep them — and `dispose()` still reaches the original.
+
+  The absence is asserted: `test/lab_key_sink_test.dart` has no filesystem test,
+  because there is nothing to test.
+
+- 7 tests for the seam, including that a throwing callback aborts establishment
+  rather than silently losing a key, and that a sink receives the same buffer
+  the session later wipes.
+
+### Note
+
+- **pubspec `description` shortened to 153 characters.** It was 271, outside
+  pub.dev's 20-180 scoring window. The full framing of the research programme
+  remains in `README.md` and `doc/00-overview.md`; the description now says what
+  the package is for.
+
+### Note
+
+`0.1.1` is published on pub.dev from a commit where this package did not
+compile. Consider a `0.1.2` yank or an explicit note; this PR does not do it.
+
 ## 0.1.1
 
 - Use exported `pqforge` SHAKE256 instead of direct import from `pqcrypto` (R3).
