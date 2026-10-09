@@ -57,6 +57,13 @@ from copying a buffer and has no `mlock` equivalent.
 
 ### Note
 
+- **pubspec `description` shortened to 153 characters.** It was 271, outside
+  pub.dev's 20-180 scoring window. The full framing of the research programme
+  remains in `README.md` and `doc/00-overview.md`; the description now says what
+  the package is for.
+
+### Note
+
 `0.1.1` is published on pub.dev from a commit where this package did not
 compile. Consider a `0.1.2` yank or an explicit note; this PR does not do it.
 
