@@ -1,3 +1,4 @@
+import 'package:zeroize/zeroize.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -125,9 +126,16 @@ class PostRendezvousSession {
       };
 
   /// Wipe session key material.
+  ///
+  /// Uses `package:zeroize`'s `secureZero`, which is
+  /// `@pragma('vm:never-inline')` and anchors the writes with opaque reads, so
+  /// they survive Dead Store Elimination in AOT. A `fillRange(0, n, 0)` loop
+  /// does not, which is what this replaced.
+  ///
+  /// Safe to call more than once.
   void dispose() {
     _session?.dispose();
     _session = null;
-    sessionKey.fillRange(0, sessionKey.length, 0);
+    secureZero(sessionKey);
   }
 }

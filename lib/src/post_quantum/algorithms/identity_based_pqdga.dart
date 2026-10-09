@@ -1,3 +1,4 @@
+import 'package:zeroize/zeroize.dart';
 import 'dart:typed_data';
 
 import 'package:pqforge/pqforge.dart';
@@ -129,6 +130,21 @@ class IdentityBasedLabSession {
 
   /// Parameter set for optional signatures.
   final PqSignatureAlgorithm signatureAlgorithm;
+
+  /// Wipes [signatureSecretKey].
+  ///
+  /// The field is documented "do not log" but there was previously no way to
+  /// clear it. Uses `package:zeroize`'s `secureZero`, which is
+  /// `@pragma('vm:never-inline')` and anchors the writes with opaque reads so
+  /// they survive Dead Store Elimination in AOT.
+  ///
+  /// Safe to call more than once. [identityPublicKey] is not wiped: it is
+  /// public.
+  ///
+  /// Best-effort erasure, not a memory-erasure guarantee.
+  void dispose() {
+    secureZero(signatureSecretKey);
+  }
 
   const IdentityBasedLabSession({
     required this.algorithm,

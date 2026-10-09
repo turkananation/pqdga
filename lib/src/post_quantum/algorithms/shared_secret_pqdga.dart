@@ -1,3 +1,4 @@
+import 'package:zeroize/zeroize.dart';
 import 'dart:typed_data';
 
 import 'package:pqforge/pqforge.dart';
@@ -127,6 +128,26 @@ class SharedSecretLabSession {
 
   /// Parameter set.
   final PqKemAlgorithm kemAlgorithm;
+
+  /// Wipes [kemSecretKey] and [sharedSecret].
+  ///
+  /// Both fields are live key material for as long as this session exists, and
+  /// the class documentation already warns not to log them. There was previously
+  /// no way to clear them at all.
+  ///
+  /// Uses `package:zeroize`'s `secureZero`, which is
+  /// `@pragma('vm:never-inline')` and anchors the writes with opaque reads so
+  /// they survive Dead Store Elimination in AOT.
+  ///
+  /// Safe to call more than once. [kemPublicKey] and [kemCiphertext] are not
+  /// wiped: both are public artifacts.
+  ///
+  /// This is best-effort erasure, not a memory-erasure guarantee. Pure Dart
+  /// cannot stop the GC from copying a buffer, and has no `mlock` equivalent.
+  void dispose() {
+    secureZero(kemSecretKey);
+    secureZero(sharedSecret);
+  }
 
   const SharedSecretLabSession({
     required this.algorithm,

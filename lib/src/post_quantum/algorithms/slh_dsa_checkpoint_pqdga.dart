@@ -5,7 +5,9 @@ import 'package:pqdga/src/post_quantum/crypto/dns_label_codec.dart';
 import 'package:pqdga/src/post_quantum/crypto/shake_xof.dart';
 import 'package:pqdga/src/post_quantum/crypto/slh_dsa_sizes.dart';
 import 'package:pqdga/src/post_quantum/pqdga_core.dart';
-import 'package:pqforge/pqforge.dart';
+// pqforge deliberately does NOT re-export pqcrypto's lattice primitives
+// (see the note in pqforge's barrel doc), so import pqcrypto directly.
+import 'package:pqcrypto/pqcrypto.dart';
 
 /// SLH-DSA **checkpoint** lab family (post-R9 optional).
 ///

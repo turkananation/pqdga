@@ -1,6 +1,6 @@
 name: pqdga
 description: A defensive research framework for studying deterministic namespace/rendezvous constructions under different cryptographic binding models, including ML-KEM, ML-DSA, SLH-DSA, KMAC, hybrid key material, ratcheting, hierarchical derivation, multi-party and threshold models.
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/turkananation/pqdga
 homepage: https://turkananation.github.io/pqdga/
 
@@ -10,8 +10,14 @@ environment:
 # Add regular dependencies here.
 dependencies:
   pointycastle: ^4.0.0
+  # Direct dependency: pqdga calls the ML-KEM / ML-DSA / SLH-DSA primitives
+  # directly, and pqforge does not re-export them.
+  pqcrypto: ^0.4.2
   pqforge: ^0.4.3
   swissarmyknife: ^0.1.0
+  # Secret-buffer zeroing for lab sessions that hold private key material.
+  # Pure Dart, single transitive dependency (package:meta).
+  zeroize: ^0.1.0
 
 dev_dependencies:
   lints: ^6.0.0

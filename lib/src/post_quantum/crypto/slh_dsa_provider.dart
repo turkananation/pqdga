@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:pqforge/pqforge.dart';
+// pqforge deliberately does NOT re-export pqcrypto's lattice primitives
+// (see the note in pqforge's barrel doc), so import pqcrypto directly.
+import 'package:pqcrypto/pqcrypto.dart';
 
 /// Primitive preference: **pqforge → pqcrypto → other**.
 ///

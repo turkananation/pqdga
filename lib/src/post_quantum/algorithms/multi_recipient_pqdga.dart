@@ -1,3 +1,4 @@
+import 'package:zeroize/zeroize.dart';
 import 'dart:typed_data';
 
 import 'package:pqforge/pqforge.dart';
@@ -103,8 +104,11 @@ class MultiRecipientPqdga extends PQDGAAlgorithm {
         'kem_ciphertext_length': wrapEnc.ciphertext.length,
         'approx_entry_bytes': entrySize,
       });
-      // Touch wrapEnc.sharedSecret so analyzer knows it's used (wipe conceptually).
-      wrapEnc.sharedSecret.fillRange(0, wrapEnc.sharedSecret.length, 0);
+      // Wipe the per-recipient shared secret. Uses package:zeroize rather than
+      // fillRange(0, n, 0): secureZero is @pragma('vm:never-inline') with
+      // opaque read anchors, so the writes survive Dead Store Elimination in
+      // AOT. A bare fillRange does not.
+      secureZero(wrapEnc.sharedSecret);
     }
 
     final algo = MultiRecipientPqdga(
