@@ -1,4 +1,8 @@
-import 'package:zeroize/zeroize.dart';
+// Prefixed deliberately: pqcrypto also exports a symbol named secureZero,
+// and its implementation is a plain loop without the DSE guard. Under
+// 'pub downgrade' both become visible through pqforge and the plain
+// import becomes AMBIGUOUS_IMPORT. This must be the hardened one.
+import 'package:zeroize/zeroize.dart' as zeroize;
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -136,6 +140,6 @@ class PostRendezvousSession {
   void dispose() {
     _session?.dispose();
     _session = null;
-    secureZero(sessionKey);
+    zeroize.secureZero(sessionKey);
   }
 }

@@ -1,4 +1,8 @@
-import 'package:zeroize/zeroize.dart';
+// Prefixed deliberately: pqcrypto also exports a symbol named secureZero,
+// and its implementation is a plain loop without the DSE guard. Under
+// 'pub downgrade' both become visible through pqforge and the plain
+// import becomes AMBIGUOUS_IMPORT. This must be the hardened one.
+import 'package:zeroize/zeroize.dart' as zeroize;
 import 'dart:typed_data';
 
 import 'package:pqforge/pqforge.dart';
@@ -108,7 +112,7 @@ class MultiRecipientPqdga extends PQDGAAlgorithm {
       // fillRange(0, n, 0): secureZero is @pragma('vm:never-inline') with
       // opaque read anchors, so the writes survive Dead Store Elimination in
       // AOT. A bare fillRange does not.
-      secureZero(wrapEnc.sharedSecret);
+      zeroize.secureZero(wrapEnc.sharedSecret);
     }
 
     final algo = MultiRecipientPqdga(

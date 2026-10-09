@@ -1,4 +1,8 @@
-import 'package:zeroize/zeroize.dart';
+// Prefixed deliberately: pqcrypto also exports a symbol named secureZero,
+// and its implementation is a plain loop without the DSE guard. Under
+// 'pub downgrade' both become visible through pqforge and the plain
+// import becomes AMBIGUOUS_IMPORT. This must be the hardened one.
+import 'package:zeroize/zeroize.dart' as zeroize;
 import 'dart:typed_data';
 
 import 'package:pqforge/pqforge.dart';
@@ -162,8 +166,8 @@ class SharedSecretLabSession {
   /// This is best-effort erasure, not a memory-erasure guarantee. Pure Dart
   /// cannot stop the GC from copying a buffer, and has no `mlock` equivalent.
   void dispose() {
-    secureZero(kemSecretKey);
-    secureZero(sharedSecret);
+    zeroize.secureZero(kemSecretKey);
+    zeroize.secureZero(sharedSecret);
   }
 
   const SharedSecretLabSession({

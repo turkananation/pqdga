@@ -31,6 +31,22 @@ imported wherever its own vocabulary is the right layer.
 
 `dart analyze` now reports **no issues**, and the full suite runs: 91 tests pass.
 
+### Fixed
+
+- **`secureZero` was ambiguous.** `pqcrypto` exports a symbol of the same name
+  from its own `src/common/zeroize.dart`, and older `pqforge` versions re-export
+  it. Under `pub downgrade` both became visible through `pqforge`, so every
+  `secureZero` call site in this package became `AMBIGUOUS_IMPORT` — 5 analyzer
+  errors, and 20 lost pub points on the lower-bound check.
+
+  The `package:zeroize` import is now prefixed, with a comment explaining why it
+  must stay that way: `pqcrypto`'s implementation is a plain loop with no
+  `@pragma('vm:never-inline')` and no opaque read anchor, so it is the weaker of
+  the two and must never be the one that wins a name collision.
+
+  This is the same collision as UQ-2 in `pqkeystore`'s upstream register: two
+  packages export `secureZero`, and only one of them is DSE-safe.
+
 ### Added
 
 - `SharedSecretLabSession.dispose()` — wipes `kemSecretKey` and `sharedSecret`.
